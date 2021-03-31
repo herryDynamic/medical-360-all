@@ -1,6 +1,9 @@
-
 const dev = {
-  baseUrl: 'http://152.136.182.96:5034/',
+  baseUrl: 'http://152.136.182.96:5034/', //原地址
+  // baseUrl: 'http://172.16.115.59:5031/', // 凯总地址
+  // baseUrl: 'http://172.16.116.191:5031/', // 郭飞地址
+
+
   jumpUrl: 'http://10.131.101.56:88/patient-panorama.html' // 全景图跳转
 }
 const test = {

@@ -13,28 +13,9 @@ module.exports = {
     port: 8090,
     https: false,
     // http://172.16.116.154:5039/v1/diseaseInfoSelectHC
-    // proxy: {
-    //   '/api': {
-    //     target: 'http://172.16.115.253:5039/',
-    //     // secure: false,
-    //     ws: true,
-    //     changeOrigin: true,
-    //     pathRewrite: {
-    //       '^/api': ''
-    //     }
-    //   },
-    //   '/tool': {
-    //     target: 'http://172.16.115.253:5037/',
-    //     ws: true,
-    //     changeOrigin: true,
-    //     pathRewrite: {
-    //       '^/tool': ''
-    //     }
-    //   }
-    // }
     proxy: {
       '/api': {
-        target: 'http://172.16.115.59:5031/',
+        target: 'http://172.16.115.253:5039/', // 原地址
         // secure: false,
         ws: true,
         changeOrigin: true,
@@ -43,7 +24,7 @@ module.exports = {
         }
       },
       '/tool': {
-        target: 'http://172.16.115.59:5031/',
+        target: 'http://172.16.115.253:5037/',
         ws: true,
         changeOrigin: true,
         pathRewrite: {
