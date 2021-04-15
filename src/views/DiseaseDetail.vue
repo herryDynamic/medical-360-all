@@ -49,6 +49,8 @@ export default {
       // console.log(item)
       localStorage.setItem('userName', item.tpatname)
       localStorage.setItem('patientId', item.patient_id)
+      localStorage.setItem('numHospital',item.num_hospital)
+      console.log(item.num_hospital,'item.num_hospital');
       this.$router.push({ path: 'DiseaseList/DiseaseDetail360', query: { disease_name: this.$route.query.disease_name } })
     }
   }

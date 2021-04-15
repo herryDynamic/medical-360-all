@@ -11,8 +11,8 @@ const actions = {
       })
     } else {
       param = {
-        patient_id: '1',
-        num_hospital: 1,
+        patient_id: localStorage.getItem('patientId'),
+        num_hospital: localStorage.getItem('numHospital'),
         disease_name: localStorage.getItem('disease_name')
       }
     }
@@ -60,8 +60,8 @@ const actions = {
       })
     } else {
       param = {
-        patient_id: '1',
-        num_hospital: 1,
+        patient_id: localStorage.getItem('patientId'),
+        num_hospital: localStorage.getItem('numHospital'),
         diseaseInfoModel: submitArr,
         disease_name: localStorage.getItem('disease_name')
       }
