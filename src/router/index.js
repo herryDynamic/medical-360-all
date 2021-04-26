@@ -74,18 +74,20 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
-router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token')
-  if (to.name === 'Login') {
-    next()
-  } else {
-    if (token) {
-      next()
-    } else {
-      next('/login')
-    }
-  }
-  next()
-})
+// 将此打开即可看到登录
+// router.beforeEach((to, from, next) => {
+//   // 判断没有token跳登录
+//   const token = localStorage.getItem('token')
+//   if (to.name === 'Login') {
+//     next()
+//   } else {
+//     if (token) {
+//       next()
+//     } else {
+//       next('/login')
+//     }
+//   }
+//   next()
+// })
 
 export default router
