@@ -10,6 +10,9 @@ axios.defaults.baseURL = currentScience.baseUrl
 // axios.defaults.headers.post['Content-type'] = 'application/x-www-form-urlcode;chatset=UTF-8'
 axios.interceptors.request.use(
   config => {
+    if (config.headers['Content-Type'] && config.data instanceof FormData) {
+      config.headers['Content-Type'] = 'multipart/form-data'
+    }
     // const token = localStorage.getItem('token')
     // token && (config.headers.Authorization = token)
     return config
@@ -28,7 +31,7 @@ axios.interceptors.response.use(
     }
   },
   error => {
-    if ((JSON.stringify(error.message)).includes('timeout')) {
+    if (JSON.stringify(error.message).includes('timeout')) {
       Message.error('请求超时，请稍后再试！')
     } else {
       if (error.response === undefined) {
@@ -77,17 +80,41 @@ axios.interceptors.response.use(
  * get方法，对应get请求
  * @param {String} url 请求的url地址
  * @param {Object} params 请求时携带的参数
-*/
+ */
 
 export function get (url, params) {
   return new Promise((resolve, reject) => {
-    axios.get(url, {
-      params: params
-    }).then((res) => {
-      resolve(res)
-    }).catch((err) => {
-      reject(err)
-    })
+    axios
+      .get(url, {
+        params: params
+      })
+      .then(res => {
+        resolve(res)
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+/**
+ * get方法，对应get请求
+ * @param {String} url 请求的url地址
+ * @param {Object} params 请求时携带的参数
+ */
+
+export function getBlob (url, params) {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(url, {
+        params: params,
+        responseType: 'blob'
+      })
+      .then(res => {
+        resolve(res)
+      })
+      .catch(err => {
+        reject(err)
+      })
   })
 }
 
@@ -95,14 +122,17 @@ export function get (url, params) {
  * post方法，对应post请求
  * @param {String} url  请求的url地址
  * @param {Object} params 请求时携带的参数  json
-*/
+ */
 
 export function post (url, params) {
   return new Promise((resolve, reject) => {
-    axios.post(url, params).then(res => {
-      resolve(res.data)
-    }).catch(err => {
-      reject(err.data)
-    })
+    axios
+      .post(url, params)
+      .then(res => {
+        resolve(res.data)
+      })
+      .catch(err => {
+        reject(err.data)
+      })
   })
 }

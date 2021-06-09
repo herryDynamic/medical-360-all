@@ -1,7 +1,4 @@
-import {
-  get,
-  post
-} from '../http'
+import { get, post, getBlob } from '../http'
 const diease360 = {
   apiAddress: p => get('/testing/restful', p),
   apiShopList: p => post('/v1/users/my_list/shop', p),
@@ -14,7 +11,10 @@ const diease360 = {
   apiGetDiseaseInfoSelectHC: p => post('/v1/diseaseInfoSelect', p),
   similarityCase: p => post('/v1/similarityCase', p),
   // getSimilarityEntity: p => get(`/v1/getSimilarityEntity/${p}`),
-  getSimilarityEntity: p => post('/v1/getSimilarityEntity',p),
+  getSimilarityEntity: p => post('/v1/getSimilarityEntity', p),
+  exportDataModel: p => getBlob(`/v1/exportDataModel/${p.disease_name}`), // 生成导入模板
+  importData: p => post('/v1/importData', p), // 导入Excel数据
+  similarityCaseSearh: p => post('/v1/similarityCaseSearh', p) // 查树状结构
 
 }
 
