@@ -101,6 +101,7 @@ import AISearchGroup from './AISearchGroup'
 import diease360 from '@/request/api/disease360'
 // import api from '@/request/index'
 import { mapMutations, mapState } from 'vuex'
+import disease360 from '../../request/api/disease360'
 export default {
   components: {
     [Table.name]: Table,
@@ -124,8 +125,11 @@ export default {
       dialogTableVisible: false,
       patientName: '',
       relaOptions: ['<', '=', '>'],
-      relationFilter: ['且', '或', '非'],
-      range: ['T3NIM0~T3NIM02', 'T3NIM2~T3NIM03'],
+      relationFilter: [
+        { label: '且', value: 'and' },
+        { label: '或', value: 'or' }
+      ],
+      range: ['T3NIM0~T3NIM02', 'T3NIM2~T3NIM03'], // 值域范围下拉框数据：后台返回
       filtersData: ['搜索关系', '搜索主题', '搜索条件', '值域范围'],
       isShowEchart: 1,
       advancedSearchForm: {},
@@ -197,7 +201,9 @@ export default {
     ...mapState({
       searchFilters: state => state.disease360.searchFilters,
       chartData: state => state.disease360.chartData,
-      chartList: state => state.disease360.chartList
+      chartList: state => state.disease360.chartList,
+      searchDataList: state => state.disease360.searchDataList,
+      searchDataIndex: state => state.disease360.searchDataIndex
     })
   },
   mounted () {
@@ -209,7 +215,19 @@ export default {
     this.similarityCase()
     this.getSimilarityEntity()
   },
+  watch: {
+    searchDataIndex (val) {
+      console.log(val)
+      this.range = []
+      this.range = this.searchDataList[val].publicInfoModel.map(item => {
+        return item.public_info_title
+      })
+    }
+  },
   methods: {
+    ...mapMutations({
+      SEARCHDATALIST: 'disease360/SEARCHDATALIST'
+    }),
     similarityCase () {
       const param = {
         patient_id: localStorage.getItem('patientId'),
@@ -231,6 +249,14 @@ export default {
           console.log()
         })
     },
+    // // 查树状结构
+    // getSimilarityEntity () {
+    //   const data = {
+    //     disease_name: localStorage.getItem('disease_name')
+    //   }
+    //   diease360.getSimilarityEntity(data).then(res => {})
+    // },
+    // 表格数据
     getSimilarityEntity () {
       const param = {
         patient_id: localStorage.getItem('patientId'),
@@ -254,7 +280,16 @@ export default {
             label: '相似度',
             key: 'scop'
           })
-          // console.log(res, 'res')
+          // 赋值下拉框数据
+          var searchDataList = []
+          searchDataList = res.data.map((item, index) => {
+            return {
+              label: item.disease_info_title,
+              value: index + '-' + item.id + '-' + item.disease_info_title,
+              publicInfoModel: item.publicInfoModel
+            }
+          })
+          this.SEARCHDATALIST(searchDataList)
         })
         .catch(err => {
           console.log()
@@ -302,7 +337,87 @@ export default {
       ONDELFLITER: 'disease360/ONDELFLITER'
     }),
     onSubmit () {
-      this.onChangeComponent({ val: 1, title: '病人筛选结果' })
+      const data = {
+        disease_name: localStorage.getItem('disease_name'),
+        sign: [
+          {
+            searchName: 'N分期',
+            searchVal: 'N1',
+            opt: '',
+            searchType: '=',
+            relationId: '118',
+            praList: [
+              {
+                searchName: 'M分期',
+                searchVal: 'M0',
+                opt: '',
+                searchType: '=',
+                relationId: '119',
+                praList: []
+              }
+            ]
+          },
+          {
+            searchName: 'N分期',
+            searchVal: 'N2',
+            opt: 'or',
+            searchType: '=',
+            relationId: '118',
+            praList: [
+              {
+                searchName: 'M分期',
+                searchVal: 'M0',
+                opt: '',
+                searchType: '=',
+                relationId: '119',
+                praList: []
+              }
+            ]
+          }
+        ]
+      }
+      const dataTable = this.searchFilters?.map(item => {
+        return {
+          searchName: item.theme.split('-')[2],
+          searchVal: item.range,
+          opt: item.relation,
+          searchType: item.condition,
+          relationId: item.theme.split('-')[1],
+          praList: []
+        }
+      })
+      for (let i = 0; i < dataTable.length; i++) {
+        dataTable[i].praList = this.searchFilters[i].children?.map(item => {
+          return {
+            searchName: item.theme.split('-')[2],
+            searchVal: item.range,
+            opt: '',
+            searchType: item.condition,
+            relationId: item.theme.split('-')[1],
+            praList: []
+          }
+        })
+      }
+
+      data.sign = dataTable
+
+      disease360.similarityCaseSearh(data).then(res => {
+        if (res.status === '0') {
+          console.log(res.data)
+          this.tableData = res.data
+
+          this.tableData.forEach(element => {
+            if (element.scop) {
+              element.scop = element.scop + '%'
+            }
+          })
+
+          this.onChangeComponent({ val: 1, title: '病人筛选结果' })
+        }
+      })
+
+      console.log(this.searchFilters)
+      // this.onChangeComponent({ val: 1, title: '病人筛选结果' })
     },
     onTabClick (tab, event) {
       this.activeName = tab.name

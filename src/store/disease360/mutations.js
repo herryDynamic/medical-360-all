@@ -5,20 +5,36 @@ import { zoom } from '@/utils/animate'
 import currentScience from '@/config'
 let preType
 const mutations = {
+  // 添加children事件
   [TYPES.ONADDChILDFILTER] (state, v) {
     const obj = { theme: '', condition: '', range: '' }
     state.searchFilters[v].children.push(obj)
   },
+  // 删除children数据
   [TYPES.ONDELCHILDFLITER] (state, { index, idx }) {
     state.searchFilters[index].children.splice(idx, 1)
   },
+  // 添加一条数据事件
   [TYPES.ONADDFLITER] (state) {
-    const obj = { relation: '', theme: '', condition: '', range: '', children: [] }
+    const obj = {
+      relation: '',
+      theme: '',
+      condition: '',
+      range: '',
+      children: []
+    }
     state.searchFilters.push(obj)
     console.warn(state.searchFilters)
   },
+  // 删除数据
   [TYPES.ONDELFLITER] (state, index) {
     state.searchFilters.splice(index, 1)
+  },
+  [TYPES.SEARCHDATALIST] (state, data) {
+    state.searchDataList = Object.assign(data)
+  },
+  [TYPES.SEARCHDATAINDEX] (state, data) {
+    state.searchDataIndex = Number(data)
   },
   [TYPES.SETDISEASEINFOSELECTDATA] (state, v) {
     console.log(v)
@@ -38,6 +54,7 @@ const mutations = {
   [TYPES.SETFINISHED] (state, v) {
     Vue.set(state.diseaseInfoSelectData, 'finished', true)
   },
+  // 搜索主题下拉框
   [TYPES.ONSHOWTOAST] (state, obj) {
     // if (obj.parentIndex === 3 || obj.parentIndex === 4) return
     state.dialogShow = true
@@ -45,7 +62,9 @@ const mutations = {
       state.themeObj = { ...obj }
       state.componentForm = 'FormDialog'
     } else {
-      const diseaseInfoModel = JSON.parse(localStorage.getItem('diseaseInfoModel'))
+      const diseaseInfoModel = JSON.parse(
+        localStorage.getItem('diseaseInfoModel')
+      )
       state.componentForm = 'FormDialogEdit'
       state.dialogTitle = diseaseInfoModel[obj.childIndex].disease_info_title
       let vultArr = []
@@ -65,14 +84,17 @@ const mutations = {
       recursiveArr(diseaseInfoModel[obj.childIndex].children)
       vultArr.map((ele, index, array) => {
         if (ele.multiselect === 1) {
-          const arrm = (ele.disease_info_title_value ? ele.disease_info_title_value : '').split(',')
-          array[index].smoveList = arrm.filter((e) => {
+          const arrm = (ele.disease_info_title_value
+            ? ele.disease_info_title_value
+            : ''
+          ).split(',')
+          array[index].smoveList = arrm.filter(e => {
             return e
           })
         }
         if (ele.disease_info_title === 'ECOG-PS评分') {
           state.publicInfoModel = ele.publicInfoModel
-          ele.publicInfoModel.map((opt) => {
+          ele.publicInfoModel.map(opt => {
             if (opt.public_info_title === ele.disease_info_title_value) {
               state.optionTip = opt.public_info_title_value
             }
@@ -84,7 +106,7 @@ const mutations = {
     }
   },
   [TYPES.ONCHANGEOPTION] (state, v) {
-    state.publicInfoModel.map((opt) => {
+    state.publicInfoModel.map(opt => {
       if (opt.public_info_title === v) {
         state.optionTip = opt.public_info_title_value
       }
@@ -97,9 +119,12 @@ const mutations = {
   [TYPES.ONADDSEARCHITEM] (state) {
     state.dialogShow = false
     if (state.themeObj.isParent) {
-      state.searchFilters[state.themeObj.parentIndex].theme = state.searchDialogForm.theme
+      state.searchFilters[state.themeObj.parentIndex].theme =
+        state.searchDialogForm.theme
     } else {
-      state.searchFilters[state.themeObj.parentIndex].children[state.themeObj.childIndex].theme = state.searchDialogForm.theme
+      state.searchFilters[state.themeObj.parentIndex].children[
+        state.themeObj.childIndex
+      ].theme = state.searchDialogForm.theme
     }
   },
   [TYPES.SETDRAWERDOM] (state, v) {
@@ -109,9 +134,9 @@ const mutations = {
     state.submitLoading = v
   },
   /**
-     * onShoworCloseDrawer : 显示/隐藏抽屉
-     * params type（1：方案推荐、2：相似病例、3：文案检索、0：关闭）
-    */
+   * onShoworCloseDrawer : 显示/隐藏抽屉
+   * params type（1：方案推荐、2：相似病例、3：文案检索、0：关闭）
+   */
   [TYPES.ONSHOWORCLOSEDRAWER] (state, { drawer, type = 1 }) {
     // console.log(type)
     if (type === 4) {
@@ -133,7 +158,7 @@ const mutations = {
         state.componentDefault = 'SchemeRecommendation'
         break
       case 2:
-        state.draweWidth = parseInt(state.screenWidth * 9 / 10)
+        state.draweWidth = parseInt((state.screenWidth * 9) / 10)
         stap = 40
         state.componentDefault = 'SimilarCases'
         preType = type

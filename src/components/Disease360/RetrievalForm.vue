@@ -33,9 +33,9 @@
               >
                 <el-option
                   v-for="item in relationFilter"
-                  :key="item"
-                  :label="item"
-                  :value="item"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
                 >
                 </el-option>
               </el-select>
@@ -53,7 +53,7 @@
                 })
               "
               suffix-icon="el-icon-plus"
-              v-model="fliter.theme"
+              v-model="fliter.theme.split('-')[2]"
             >
             </el-input>
             <!-- 关系下拉框 -->
@@ -88,6 +88,7 @@
               >
               </el-option>
             </el-select>
+            <!-- 添加children -->
             <div style="padding-left: 20px">
               <el-button
                 type="primary"
@@ -96,6 +97,7 @@
                 @click="ONADDChILDFILTER(index)"
               ></el-button>
             </div>
+            <!-- 添加一条数据 -->
             <div style="padding-left: 20px">
               <el-button
                 type="success"
@@ -104,6 +106,7 @@
                 @click="ONADDFLITER"
               ></el-button>
             </div>
+            <!-- 删除数据 -->
             <div v-if="index" style="padding-left: 20px">
               <el-button
                 type="info"
@@ -134,7 +137,7 @@
                   })
                 "
                 suffix-icon="el-icon-plus"
-                v-model="child.theme"
+                v-model="child.theme.split('-')[2]"
               >
               </el-input>
             </div>
@@ -170,6 +173,7 @@
               >
               </el-option>
             </el-select>
+            <!-- 删除一条children数据 -->
             <div style="padding-left: 20px">
               <el-button
                 type="info"
@@ -194,35 +198,46 @@
 import { mapMutations } from 'vuex'
 export default {
   props: {
+    // 当前注释
     form: {
       type: Object
     },
+    // 暂时无用
+    searchDialogForm: {
+      type: Object
+    },
+    // 页面title数据
     filtersData: {
       type: Array
     },
+    // 页面循环数据
     searchFilters: {
       type: Array
     },
+    // 搜索条件：关系下拉框
     relaOptions: {
       type: Array
     },
+    // 且、或、非关系下拉框
     relationFilter: {
       type: Array
     },
     // 值域范围下拉框数据
     range: {
       type: Array
-    },
-    searchDialogForm: {
-      type: Object
     }
   },
   methods: {
     ...mapMutations({
+      // 搜索主题下拉框
       ONSHOWTOAST: 'disease360/ONSHOWTOAST',
+      // 添加一条数据事件
       ONADDFLITER: 'disease360/ONADDFLITER',
+      // 添加children事件
       ONADDChILDFILTER: 'disease360/ONADDChILDFILTER',
+      // 删除数据
       ONDELFLITER: 'disease360/ONDELFLITER',
+      // 删除children数据
       ONDELCHILDFLITER: 'disease360/ONDELCHILDFLITER'
     }),
     onSubmit () {
