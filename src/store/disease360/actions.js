@@ -6,7 +6,7 @@ const actions = {
     let param = {}
     console.log(query.split('&'))
     if (query.split('&').length > 1) {
-      query.split('&').map((e) => {
+      query.split('&').map(e => {
         param[e.split('=')[0]] = e.split('=')[1]
       })
     } else {
@@ -18,22 +18,35 @@ const actions = {
     }
     commit(TYPES.FULLSCREENLOADING, true)
     commit(TYPES.SETFINISHED)
-    api.diease360.apiGetDiseaseInfoSelectHC(param).then(res => {
-      if (res.status === '1') {
-        Vue.prototype.$message.error(res.message)
+    api.diease360
+      .apiGetDiseaseInfoSelectHC(param)
+      .then(res => {
+        if (res.status === '1') {
+          Vue.prototype.$message.error(res.message)
+          commit(TYPES.FULLSCREENLOADING, false)
+        } else {
+          commit(TYPES.SETDISEASEINFOSELECTDATA, res.data)
+
+          // 配置全科的不显示方案推荐
+          // eslint-disable-next-line no-unused-vars
+          let drawerType = 1
+          if (localStorage.getItem('department') === '全科') {
+            drawerType = 2
+          }
+          commit(TYPES.ONSHOWORCLOSEDRAWER, { drawer, type: drawerType })
+          localStorage.setItem(
+            'diseaseInfoModel',
+            JSON.stringify(res.data.diseaseInfoModel)
+          )
+        }
+      })
+      .catch(err => {
+        console.log(err)
         commit(TYPES.FULLSCREENLOADING, false)
-      } else {
-        commit(TYPES.SETDISEASEINFOSELECTDATA, res.data)
-        commit(TYPES.ONSHOWORCLOSEDRAWER, { drawer, type: 1 })
-        localStorage.setItem('diseaseInfoModel', JSON.stringify(res.data.diseaseInfoModel))
-      }
-    }).catch((err) => {
-      console.log(err)
-      commit(TYPES.FULLSCREENLOADING, false)
-      Vue.prototype.$message.error(JSON.stringify(err))
-      // this.fullscreenLoading = false
-      // this.finished = true
-    })
+        Vue.prototype.$message.error(JSON.stringify(err))
+        // this.fullscreenLoading = false
+        // this.finished = true
+      })
   },
   apiPostEdit (context, { query }) {
     context.commit(TYPES.SETSUBMITLOADING, true)
@@ -54,7 +67,7 @@ const actions = {
     let param = {}
     console.log(query.split('&'))
     if (query.split('&').length > 1) {
-      query.split('&').map((e) => {
+      query.split('&').map(e => {
         param[e.split('=')[0]] = e.split('=')[1]
         param.diseaseInfoModel = submitArr
       })
@@ -67,26 +80,31 @@ const actions = {
       }
     }
 
-    api.diease360.apiUpdateDiseaseInfo(param).then((res) => {
-      if (res.status === '1') {
-        Vue.prototype.$message.error(res.message)
-        context.commit(TYPES.SETSUBMITLOADING, false)
-      } else {
-        context.commit(TYPES.SETSUBMITLOADING, false)
+    api.diease360
+      .apiUpdateDiseaseInfo(param)
+      .then(res => {
+        if (res.status === '1') {
+          Vue.prototype.$message.error(res.message)
+          context.commit(TYPES.SETSUBMITLOADING, false)
+        } else {
+          context.commit(TYPES.SETSUBMITLOADING, false)
+          context.commit(TYPES.CLOSEDIALOG)
+          context.dispatch('apiGetDiseaseInfoSelectHCForm', {
+            drawer: null,
+            query
+          })
+          Vue.prototype.$message({
+            message: '修改成功！',
+            type: 'success'
+          })
+        }
+      })
+      .catch(err => {
+        console.log(err)
         context.commit(TYPES.CLOSEDIALOG)
-        context.dispatch('apiGetDiseaseInfoSelectHCForm', { drawer: null, query })
-        Vue.prototype.$message({
-          message: '修改成功！',
-          type: 'success'
-        })
-      }
-    }).catch((err) => {
-      console.log(err)
-      context.commit(TYPES.CLOSEDIALOG)
-      context.commit(TYPES.SETSUBMITLOADING, false)
-    })
+        context.commit(TYPES.SETSUBMITLOADING, false)
+      })
   }
-
 }
 
 export default actions

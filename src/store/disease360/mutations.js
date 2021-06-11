@@ -42,7 +42,6 @@ const mutations = {
     for (let i = 0; i < data.data.length; i++) {
       headerData.push([])
       for (let j = 0; j < state.chartData.schema.length; j++) {
-        debugger
         const constdata = [state.chartData.schema[j].title]
         headerData[i].push(data.data[i][constdata])
       }

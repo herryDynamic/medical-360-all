@@ -42,7 +42,8 @@
           class="select-tab"
           :style="{ top: `${10 + 60 * index}px` }"
         >
-          <i :class="tab.icon"></i><span>{{ tab.title }}</span>
+          <i :class="tab.icon" v-if="tab.count != 1"></i
+          ><span v-if="tab.count != 1">{{ tab.title }}</span>
         </p>
       </div>
     </div>
@@ -123,10 +124,10 @@ export default {
     return {
       diseaseInfo: {},
       rightDraweTabs: [
-        { title: '方案推荐', icon: 'el-icon-s-cooperation' },
-        { title: '相似病例', icon: 'el-icon-s-claim' },
-        { title: '文献检索', icon: 'el-icon-s-finance' },
-        { title: '全景图', icon: 'el-icon-time' }
+        { title: '方案推荐', icon: 'el-icon-s-cooperation', count: 0 },
+        { title: '相似病例', icon: 'el-icon-s-claim', count: 0 },
+        { title: '文献检索', icon: 'el-icon-s-finance', count: 0 },
+        { title: '全景图', icon: 'el-icon-time', count: 0 }
         // { title: '随访', icon: 'el-icon-edit-outline' }
         // { title: 'MDT', icon: 'el-icon-edit-outline' }
       ],
@@ -142,29 +143,30 @@ export default {
   },
   computed: {
     ...mapState({
-      dialogShow: (state) => state.disease360.dialogShow,
-      searchDialogForm: (state) => state.disease360.searchDialogForm,
-      componentForm: (state) => state.disease360.componentForm,
-      dialogTitle: (state) => state.disease360.dialogTitle,
-      diseaseInfoSelectData: (state) => state.disease360.diseaseInfoSelectData,
-      drawer: (state) => state.disease360.drawer,
-      screenWidth: (state) => state.disease360.screenWidth,
-      componentDefault: (state) => state.disease360.componentDefault,
-      defaultTab: (state) => state.disease360.defaultTab
+      dialogShow: state => state.disease360.dialogShow,
+      searchDialogForm: state => state.disease360.searchDialogForm,
+      componentForm: state => state.disease360.componentForm,
+      dialogTitle: state => state.disease360.dialogTitle,
+      diseaseInfoSelectData: state => state.disease360.diseaseInfoSelectData,
+      drawer: state => state.disease360.drawer,
+      screenWidth: state => state.disease360.screenWidth,
+      componentDefault: state => state.disease360.componentDefault,
+      defaultTab: state => state.disease360.defaultTab
     })
   },
   mounted () {
+    // 配置全科的不显示方案推荐
+    const drawerType = localStorage.getItem('department')
+    if (drawerType === '全科') {
+      this.rightDraweTabs[0].count = 1
+    }
     console.log(this.diseaseInfoSelectData)
     this.$store.commit('disease360/SETDRAWERDOM', this.$refs.drawer)
     this.$store.dispatch('disease360/apiGetDiseaseInfoSelectHCForm', {
       drawer: this.$refs.drawer,
       query: window.location.hash ? window.location.hash.split('?')[1] : ''
     })
-    window.addEventListener(
-      'message',
-      this.receiveMessageFromIframePage,
-      false
-    )
+    window.addEventListener('message', this.receiveMessageFromIframePage, false)
   },
   methods: {
     receiveMessageFromIframePage (event) {

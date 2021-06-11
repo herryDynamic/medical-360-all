@@ -1,24 +1,43 @@
-
 <template>
-  <div class="entry-box-top-wrap" v-loading="loading"
+  <div
+    class="entry-box-top-wrap"
+    v-loading="loading"
     element-loading-text="拼命加载中..."
     element-loading-spinner="el-icon-loading"
-    element-loading-background="rgba(0, 0, 0, 0.03)">
+    element-loading-background="rgba(0, 0, 0, 0.03)"
+  >
     <el-card shadow="always">
       <div class="ts-form-wrap">
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
           <el-form-item label="">
-            <el-select v-model="formInline.region" placeholder="科室查询" clearable >
-              <el-option :label="item.key" :value="key" v-for="[key,item] in saveList" :key="key"></el-option>
+            <el-select
+              v-model="formInline.region"
+              placeholder="科室查询"
+              clearable
+            >
+              <el-option
+                :label="item.key"
+                :value="key"
+                v-for="[key, item] in saveList"
+                :key="key"
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="SEARCHCARDLIST(formInline.region)">查询</el-button>
+            <el-button type="primary" @click="SEARCHCARDLIST(formInline.region)"
+              >查询</el-button
+            >
           </el-form-item>
         </el-form>
       </div>
-      <template  v-if="cards ||loading" >
-        <DiseaseCart :cards = 'card' @goToDetail = 'goToDetail' class="home-card-wrap" v-for="[key, card] of cards" :key="key"></DiseaseCart>
+      <template v-if="cards || loading">
+        <DiseaseCart
+          :cards="card"
+          @goToDetail="goToDetail"
+          class="home-card-wrap"
+          v-for="[key, card] of cards"
+          :key="key"
+        ></DiseaseCart>
       </template>
       <Empty v-else></Empty>
     </el-card>
@@ -37,8 +56,7 @@ export default {
     [Dropdown.name]: Dropdown
   },
   data () {
-    return {
-    }
+    return {}
   },
   computed: {
     ...mapState({
@@ -58,7 +76,12 @@ export default {
       if (!item.url) return
       localStorage.setItem('userName', `${item.department} / ${item.tools} `)
       localStorage.setItem('disease_name', item.disease_name)
-      this.$router.push({ path: '/DiseaseList', query: { id: item.id, disease_name: item.disease_name } })
+      localStorage.setItem('department', item.department)
+
+      this.$router.push({
+        path: '/DiseaseList',
+        query: { id: item.id, disease_name: item.disease_name }
+      })
     },
     loginOut () {
       localStorage.removeItem('token')
@@ -82,12 +105,12 @@ export default {
     width: 20%;
     padding-right: 30px;
   }
-  /deep/ .el-form-item__content, /deep/ .el-select {
+  /deep/ .el-form-item__content,
+  /deep/ .el-select {
     width: 100%;
   }
   /deep/ .el-button {
     padding: 12px 30px;
   }
-
 }
 </style>
