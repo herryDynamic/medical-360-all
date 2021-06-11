@@ -211,22 +211,31 @@ export default {
     this.chartList.forEach((chart, index) => {
       this.chartPieInit(chart, index)
     })
-    console.log(this.screenWidth)
     this.similarityCase()
     this.getSimilarityEntity()
   },
   watch: {
     searchDataIndex (val) {
-      console.log(val)
       this.range = []
       this.range = this.searchDataList[val].publicInfoModel.map(item => {
         return item.public_info_title
       })
+    },
+    chartData: {
+      deep: true,
+      handler (val) {
+        this.initData()
+      }
+    },
+    'chartData.dataBJ' (val) {
+      // this.initData()
     }
   },
   methods: {
     ...mapMutations({
-      SEARCHDATALIST: 'disease360/SEARCHDATALIST'
+      SEARCHDATALIST: 'disease360/SEARCHDATALIST',
+      CHARTDATA: 'disease360/CHARTDATA',
+      UPDATACHARTTITLEDATA: 'disease360/UPDATACHARTTITLEDATA'
     }),
     similarityCase () {
       const param = {
@@ -266,7 +275,11 @@ export default {
       diease360
         .getSimilarityEntity(param)
         .then(res => {
-          this.HeaderData = res.data.map(item => {
+          const headerData = res.data.filter((item,i)=>{
+            return item.presentation_type ==='3';
+          })
+          console.log(headerData,'headerData');
+          this.HeaderData =headerData.map(item => {
             return {
               label: item?.disease_info_title || '',
               key: item?.disease_info_title || ''
@@ -280,15 +293,19 @@ export default {
             label: '相似度',
             key: 'scop'
           })
+ 
           // 赋值下拉框数据
           var searchDataList = []
-          searchDataList = res.data.map((item, index) => {
+          searchDataList = headerData.map((item, index) => {
             return {
               label: item.disease_info_title,
               value: index + '-' + item.id + '-' + item.disease_info_title,
               publicInfoModel: item.publicInfoModel
             }
           })
+          // 修改图标连线数据title
+          this.UPDATACHARTTITLEDATA(searchDataList)
+
           this.SEARCHDATALIST(searchDataList)
         })
         .catch(err => {
@@ -326,7 +343,6 @@ export default {
         path: 'DiseaseDetail360',
         query: { disease_name: localStorage.getItem('disease_name') }
       })
-      console.log(val, 'bvalva')
       localStorage.patientId = val.患者ID
       window.open(routeUrl.href, '_blank')
 
@@ -403,20 +419,24 @@ export default {
 
       disease360.similarityCaseSearh(data).then(res => {
         if (res.status === '0') {
-          console.log(res.data)
+          // 赋值表格
           this.tableData = res.data
-
           this.tableData.forEach(element => {
             if (element.scop) {
               element.scop = element.scop + '%'
             }
           })
-
+          // 图表赋值
+          const data = {
+            header: this.HeaderData,
+            data: res.data
+          }
+          this.CHARTDATA(data)
+          // 跳转组件
           this.onChangeComponent({ val: 1, title: '病人筛选结果' })
         }
       })
 
-      console.log(this.searchFilters)
       // this.onChangeComponent({ val: 1, title: '病人筛选结果' })
     },
     onTabClick (tab, event) {
@@ -424,29 +444,15 @@ export default {
     },
     initData () {
       const mcolors = ['rgba(0,0,0,0.1)', '#409EFF', 'rgb(141,176,243)']
-      var schema = this.chartData.schema
-      var dataBJ = this.chartData.dataBJ
-      var dataGZ = this.chartData.dataGZ
-      var dataSH = this.chartData.dataSH
-      var option = {
-        parallelAxis: [
-          {
-            dim: 0,
-            name: schema[0].title,
-            type: 'category',
-            data: ['直肠', '结肠', '未知']
-          },
-          { dim: 1, name: schema[1].title },
-          { dim: 2, name: schema[2].title },
-          { dim: 3, name: schema[3].title },
-          { dim: 4, name: schema[4].title },
-          {
-            dim: 5,
-            name: schema[5].title,
-            type: 'category',
-            data: ['腺癌', '粘液癌', '小细胞癌', '其他']
-          }
-        ],
+      const schema = this.chartData.schema
+      const dataBJ = this.chartData.dataBJ
+      const dataGZ = this.chartData.dataGZ
+      const dataSH = this.chartData.dataSH
+      const dataParallelAxis = Object.assign(this.chartData.parallelAxis)
+
+      console.log(dataBJ, 'dataBJ')
+      const option = {
+        parallelAxis: dataParallelAxis,
         parallel: {
           left: '5%',
           right: '13%',
@@ -543,15 +549,14 @@ export default {
       // 基于准备好的dom，初始化echarts实例
       setTimeout(() => {
         const myChart = this.$echarts.init(document.getElementById('myChart'))
-        myChart.setOption(option)
+        myChart.setOption(option, true)
       }, 200)
     },
     chartPieInit (chart, index) {
       var myChart = this.$echarts.init(
         document.getElementById(`doughnutChart${index}`)
       )
-      var option
-      option = {
+      const option = {
         color: ['red', 'green', 'gray', 'origin'],
         title: {
           text: chart.title,
@@ -587,7 +592,7 @@ export default {
           }
         ]
       }
-      myChart.setOption(option)
+      myChart.setOption(option, true)
     }
   }
 }

@@ -71,7 +71,7 @@
           <template slot-scope="scope">{{ scope.row.gender }}</template>
         </el-table-column>
 
-        <el-table-column prop="admit_diagnosis" label="入院诊断">
+        <el-table-column prop="admit_diagnosis" label="门急诊诊断/入院诊断">
           <template slot-scope="scope">{{
             scope.row.admit_diagnosis
           }}</template>
