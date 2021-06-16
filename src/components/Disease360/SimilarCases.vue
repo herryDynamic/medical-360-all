@@ -153,55 +153,34 @@ export default {
       },
       activeName: 'list',
       HeaderData: [
-        {
-          label: '编码',
-          key: 'code'
-        },
-        {
-          label: '姓名',
-          key: 'name'
-        },
-        {
-          label: '权限描述',
-          key: 'description'
-        }
+        // {
+        //   label: '编码',
+        //   key: 'code'
+        // },
+        // {
+        //   label: '姓名',
+        //   key: 'name'
+        // },
+        // {
+        //   label: '权限描述',
+        //   key: 'description'
+        // }
       ],
       tableData: [
-        {
-          id: 221,
-          code: '01',
-          name: '西药开立权限',
-          description: '医生对西药处方权限',
-          ifUse: '0'
-        },
-        {
-          id: 222,
-          code: '02',
-          name: '草药开立权限',
-          description: '医生对草药处方权限',
-          ifUse: '0'
-        },
-        {
-          id: 223,
-          code: '03',
-          name: '成药开立权限',
-          description: '医生对成药处方权限',
-          ifUse: '0'
-        },
-        {
-          id: 224,
-          code: '04',
-          name: '麻醉开立权限',
-          description: '医生对麻醉处方权限',
-          ifUse: '0'
-        },
-        {
-          id: 225,
-          code: '05',
-          name: '精一开立权限',
-          description: '医生对精一处方权限',
-          ifUse: '0'
-        }
+        // {
+        //   id: 221,
+        //   code: '01',
+        //   name: '西药开立权限',
+        //   description: '医生对西药处方权限',
+        //   ifUse: '0'
+        // },
+        // {
+        //   id: 222,
+        //   code: '02',
+        //   name: '草药开立权限',
+        //   description: '医生对草药处方权限',
+        //   ifUse: '0'
+        // }
       ]
     }
   },
