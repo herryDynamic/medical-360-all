@@ -93,11 +93,20 @@
         </el-table-column>
       </el-table>
       <div class="pagination-wrap">
+        <!-- <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="currentPage1"
+          :page-size="10"
+          layout="total, prev, pager, next"
+          :total="1000"
+        >
+        </el-pagination> -->
         <el-pagination
           background
           :page-size="10"
           @current-change="onCurrentChange"
-          layout="prev, pager, next"
+          layout="prev, pager, next, total"
           :total="tableDataAll.length"
         >
         </el-pagination>

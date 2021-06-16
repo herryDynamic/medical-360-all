@@ -16,11 +16,11 @@
             <span>{{ changeTitle }}</span>
             <div>
               <i
-                @click="onChangeComponent({ val: 2, title: '高级检索' })"
+                @click="onChangeComponent({ val: 2, title: '相似病例搜索' })"
                 class="ld-icon"
               ></i>
               <i
-                @click="onChangeComponent({ val: 3, title: 'AI检索' })"
+                @click="onChangeComponent({ val: 3, title: '疾病模板' })"
                 class="ai-icon"
               ></i>
             </div>
@@ -67,6 +67,14 @@
             </div>
           </div>
         </div>
+      </el-tab-pane>
+      <el-tab-pane
+        class="totalPeople"
+        :label="'总相似人数：' + tableData.length + '人'"
+        name=""
+        disabled
+        tab-position="right"
+      >
       </el-tab-pane>
     </el-tabs>
     <div class="mask-wrap shadow" v-show="dialogTableVisible">
@@ -246,7 +254,9 @@ export default {
       diease360
         .similarityCase(param)
         .then(res => {
-          this.tableData = res.data
+          this.tableData = res.data.filter((item, i) => {
+            return parseInt(item.scop) >= 50
+          })
 
           this.tableData.forEach(element => {
             if (element.scop) {
@@ -258,6 +268,24 @@ export default {
           console.log()
         })
     },
+    /*
+     * 根据数组对象属性删除对应项
+     * @param {Array} arr - 数组对象
+     * @param {String} attr - 属性
+     * @param {} value - 属性值
+     * @return void
+     */
+    removeByValue (arr, attr, value) {
+      var index = 0
+      for (var i in arr) {
+        if (arr[i][attr] === value) {
+          index = i
+          break
+        }
+      }
+      arr.splice(index, 1)
+    },
+
     // // 查树状结构
     // getSimilarityEntity () {
     //   const data = {
@@ -275,11 +303,11 @@ export default {
       diease360
         .getSimilarityEntity(param)
         .then(res => {
-          const headerData = res.data.filter((item,i)=>{
-            return item.presentation_type ==='3';
+          const headerData = res.data.filter((item, i) => {
+            return item.presentation_type === '3'
           })
-          console.log(headerData,'headerData');
-          this.HeaderData =headerData.map(item => {
+          console.log(headerData, 'headerData')
+          this.HeaderData = headerData.map(item => {
             return {
               label: item?.disease_info_title || '',
               key: item?.disease_info_title || ''
@@ -293,7 +321,7 @@ export default {
             label: '相似度',
             key: 'scop'
           })
- 
+
           // 赋值下拉框数据
           var searchDataList = []
           searchDataList = headerData.map((item, index) => {
@@ -431,6 +459,9 @@ export default {
             header: this.HeaderData,
             data: res.data
           }
+          // 去掉scop属性
+          this.removeByValue(this.HeaderData, 'key', 'scop')
+
           this.CHARTDATA(data)
           // 跳转组件
           this.onChangeComponent({ val: 1, title: '病人筛选结果' })
@@ -724,6 +755,10 @@ export default {
   .list-wrap {
     height: 80%;
     background-color: #fff;
+  }
+  /deep/.el-tabs__item.is-disabled {
+    display: inline;
+    left: 300%;
   }
 }
 </style>
