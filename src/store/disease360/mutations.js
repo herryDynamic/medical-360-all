@@ -45,7 +45,7 @@ const mutations = {
         const constdata = [state.chartData.schema[j].title]
         headerData[i].push(data.data[i][constdata])
       }
-      headerData[i][0] = headerData[i][0].split('/')[0] // 赋值数组值
+      headerData[i][0] = headerData[i][0]?.split('/')[0] // 赋值数组值
     }
     state.chartData.dataBJ = JSON.parse(JSON.stringify(headerData))
   },
@@ -133,7 +133,7 @@ const mutations = {
           const arrm = (ele.disease_info_title_value
             ? ele.disease_info_title_value
             : ''
-          ).split(',')
+          )?.split(',')
           array[index].smoveList = arrm.filter(e => {
             return e
           })

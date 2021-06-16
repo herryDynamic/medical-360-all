@@ -306,6 +306,7 @@ export default {
           const headerData = res.data.filter((item, i) => {
             return item.presentation_type === '3'
           })
+          // const headerData = res.data
           console.log(headerData, 'headerData')
           this.HeaderData = headerData.map(item => {
             return {
@@ -322,7 +323,7 @@ export default {
             key: 'scop'
           })
 
-          // 赋值下拉框数据
+          // 赋值下拉框数据：取presentation_type==3的值
           var searchDataList = []
           searchDataList = headerData.map((item, index) => {
             return {
@@ -331,6 +332,15 @@ export default {
               publicInfoModel: item.publicInfoModel
             }
           })
+          // // 取全部值
+          // var searchDataListSearch = []
+          // searchDataListSearch = res.data.map((item, index) => {
+          //   return {
+          //     label: item.disease_info_title,
+          //     value: index + '-' + item.id + '-' + item.disease_info_title,
+          //     publicInfoModel: item.publicInfoModel
+          //   }
+          // })
           // 修改图标连线数据title
           this.UPDATACHARTTITLEDATA(searchDataList)
 
@@ -422,22 +432,22 @@ export default {
       }
       const dataTable = this.searchFilters?.map(item => {
         return {
-          searchName: item.theme.split('-')[2],
+          searchName: item.theme?.split('-')[2],
           searchVal: item.range,
           opt: item.relation,
           searchType: item.condition,
-          relationId: item.theme.split('-')[1],
+          relationId: item.theme?.split('-')[1],
           praList: []
         }
       })
       for (let i = 0; i < dataTable.length; i++) {
         dataTable[i].praList = this.searchFilters[i].children?.map(item => {
           return {
-            searchName: item.theme.split('-')[2],
+            searchName: item.theme?.split('-')[2],
             searchVal: item.range,
             opt: '',
             searchType: item.condition,
-            relationId: item.theme.split('-')[1],
+            relationId: item.theme?.split('-')[1],
             praList: []
           }
         })
@@ -465,6 +475,8 @@ export default {
           this.CHARTDATA(data)
           // 跳转组件
           this.onChangeComponent({ val: 1, title: '病人筛选结果' })
+        } else {
+          this.$message.warning(res.message)
         }
       })
 

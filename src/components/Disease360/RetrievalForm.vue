@@ -88,6 +88,20 @@
               >
               </el-option>
             </el-select>
+            <!-- <div
+              v-if="range.length <= 0"
+              class="demo-input-size"
+              style="width:130px;margin-left:20px;"
+            >
+              <el-input
+                size="small"
+                placeholder="请输入内容"
+                suffix-icon="el-icon-date"
+                v-model="fliter.range"
+              >
+              </el-input>
+            </div> -->
+
             <!-- 添加children -->
             <div style="padding-left: 20px">
               <el-button
