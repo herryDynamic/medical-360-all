@@ -1,9 +1,9 @@
 <template>
-  <div class="pathology-info-ctn-wrap">
+  <div class="pathology-info-ctn-wrap" v-if="diseaseInfo">
     <div class="info-wrap clinical-info-wrap">
       <div class="clinical-info-top-wrap" ref="infoTopWrap0">
         <div class="clinical-top-wrap">
-          <span class="xjtitle-color">{{
+          <span class="xjtitle-color" v-if="diseaseInfo.diseaseInfoModel[0]">{{
             diseaseInfo.diseaseInfoModel[0] &&
               diseaseInfo.diseaseInfoModel[0].disease_info_title
           }}</span
@@ -19,7 +19,10 @@
             "
           ></i>
         </div>
-        <div class="clinical-middle-wrap">
+        <div
+          class="clinical-middle-wrap"
+          v-if="diseaseInfo.diseaseInfoModel[0].children"
+        >
           <div
             v-for="(ns, index) in formatterChildren(
               diseaseInfo.diseaseInfoModel[0].children,
@@ -83,7 +86,10 @@
           ></i>
         </div>
         <div class="clinical-m-middle-wrap">
-          <div class="clinical-m-middle-l-wrap">
+          <div
+            class="clinical-m-middle-l-wrap"
+            v-if="diseaseInfo.diseaseInfoModel[1]"
+          >
             <p
               v-for="clinicalSsmtz in diseaseInfo.diseaseInfoModel[1]
                 .children[0].children"
@@ -162,6 +168,7 @@
         </div>
       </div>
     </div>
+    <!-- 实验室检查部分 -->
     <div class="info-wrap laboratory-info-wrap">
       <div class="l-i-top-wrap">
         <div
@@ -185,6 +192,10 @@
               "
             ></i>
           </p>
+          <!-- 实验室检查下每个小标题 -->
+          <div v-if="child && child.children" class="xjtitle-color">
+            {{ child.disease_info_title }} :
+          </div>
           <div class="laboratory-sys-4-wrap">
             <div
               class="laboratory-sys-item-wrap"
@@ -320,10 +331,7 @@
           </div>
           <div
             class="jwhistory-m-middle-wrap"
-            v-if="
-              diseaseInfo.diseaseInfoModel[5].children[0]
-                .disease_info_title_value
-            "
+            v-if="diseaseInfo.diseaseInfoModel[5].children"
           >
             <p
               v-for="(item,
@@ -338,7 +346,10 @@
           </div>
           <p style="padding-left:40px;padding-bottom:20px;">......</p>
         </div>
-        <div class="clinical-info-middle-wrap">
+        <div
+          class="clinical-info-middle-wrap"
+          v-if="diseaseInfo.diseaseInfoModel[3]"
+        >
           <div class="l-i-bottom-wrap l-i-top-wrap">
             <div
               class="clinical-m-middle-wrap laboratory-info-top-wrap laboratory-sys-wrap"
@@ -360,7 +371,10 @@
                   "
                 ></i>
               </p>
-              <div class="laboratory-sys-4-wrap">
+              <div
+                class="laboratory-sys-4-wrap"
+                v-if="diseaseInfo.diseaseInfoModel[3].children"
+              >
                 <div
                   class="laboratory-sys-item-wrap"
                   v-for="(child, index) in diseaseInfo.diseaseInfoModel[3]
@@ -426,12 +440,13 @@ export default {
     })
   },
   mounted () {
-    console.log(
-      this.diseaseInfo.diseaseInfoModel[4].positionName.split(',')[0].split('-')[0] +
-        '-block',
-      'diseaseInfo.diseaseInfoModel[4].positionName.split(',
-      ')[0].split(' - ')[0]+'
-    )
+    // console.log(
+    //   this.diseaseInfo.diseaseInfoModel[4]?.positionName
+    //     .split(',')[0]
+    //     .split('-')[0] + '-block',
+    //   'diseaseInfo.diseaseInfoModel[4].positionName.split(',
+    //   ')[0].split(' - ')[0]+'
+    // )
   },
   methods: {
     ...mapMutations({
