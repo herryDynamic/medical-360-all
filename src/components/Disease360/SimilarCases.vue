@@ -9,6 +9,16 @@
             @onDetail="onDetail"
           ></SearchChartTable>
         </div>
+        <div class="pagination-wrap">
+          <el-pagination
+            background
+            :page-size="pageSize"
+            @current-change="onCurrentChange"
+            layout="prev, pager, next, total"
+            :total="tableTotal"
+          >
+          </el-pagination>
+        </div>
       </el-tab-pane>
       <el-tab-pane label="图表展示" name="chart">
         <div class="chart-wrap chart-wrap-content shadow">
@@ -68,14 +78,14 @@
           </div>
         </div>
       </el-tab-pane>
-      <el-tab-pane
+      <!-- <el-tab-pane
         class="totalPeople"
         :label="'总相似人数：' + tableData.length + '人'"
         name=""
         disabled
         tab-position="right"
       >
-      </el-tab-pane>
+      </el-tab-pane> -->
     </el-tabs>
     <div class="mask-wrap shadow" v-show="dialogTableVisible">
       <p>
@@ -166,6 +176,9 @@ export default {
         //   key: 'description'
         // }
       ],
+      tableTotal: 0,
+      pageIndex: 1,
+      pageSize: 20,
       tableData: [
         // {
         //   id: 221,
@@ -224,18 +237,27 @@ export default {
       CHARTDATA: 'disease360/CHARTDATA',
       UPDATACHARTTITLEDATA: 'disease360/UPDATACHARTTITLEDATA'
     }),
+    onCurrentChange (val) {
+      this.pageIndex = val
+      console.log(val)
+      this.similarityCase()
+    },
     similarityCase () {
       const param = {
         patient_id: localStorage.getItem('patientId'),
         num_hospital: localStorage.getItem('numHospital'),
-        disease_name: localStorage.getItem('disease_name')
+        disease_name: localStorage.getItem('disease_name'),
+        pageIndex: this.pageIndex, // 页数
+        pageSize: this.pageSize // 条数
       }
       diease360
         .similarityCase(param)
         .then(res => {
-          this.tableData = res.data.filter((item, i) => {
-            return parseInt(item.scop) >= 50
-          })
+          this.tableTotal = res.total
+          this.tableData = res.data
+          // this.tableData = res.data.filter((item, i) => {
+          //   return parseInt(item.scop) >= 50
+          // })
 
           this.tableData.forEach(element => {
             if (element.scop) {
@@ -464,6 +486,7 @@ export default {
     onTabClick (tab, event) {
       this.activeName = tab.name
     },
+    // 更新线图
     initData () {
       const mcolors = ['rgba(0,0,0,0.1)', '#409EFF', 'rgb(141,176,243)']
       const schema = this.chartData.schema
@@ -621,6 +644,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$theme-clor: rgb(35, 53, 75);
+$font-clor: rgb(30, 38, 50);
+.pagination-wrap {
+  text-align: right;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  /deep/ .el-pagination.is-background .el-pager li:not(.disabled).active {
+    background-color: $theme-clor;
+  }
+  /deep/ .el-pager li:hover {
+    color: $theme-clor;
+  }
+  /deep/ .el-pagination.is-background .el-pager li:not(.disabled).active:hover {
+    color: #fff;
+  }
+}
 .similar-case-wrap {
   padding: 0 20px;
   height: 100%;

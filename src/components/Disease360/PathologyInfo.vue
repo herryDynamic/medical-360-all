@@ -21,7 +21,10 @@
         </div>
         <div
           class="clinical-middle-wrap"
-          v-if="diseaseInfo.diseaseInfoModel[0].children"
+          v-if="
+            diseaseInfo.diseaseInfoModel[0] &&
+              diseaseInfo.diseaseInfoModel[0].children
+          "
         >
           <div
             v-for="(ns, index) in formatterChildren(
@@ -30,10 +33,9 @@
             )"
             :key="index"
             class="sub-wrap"
-            :style="{ width: ns.portion + '%' }"
           >
-            <span class="TNM-label">{{ ns.disease_info_title }}:</span>
-            <span class="padding-23 default-color"
+            <span v-if=" diseaseInfo.diseaseInfoModel[0].children[index]" class="TNM-label">{{ ns.disease_info_title || '' }}:</span>
+            <span v-if=" diseaseInfo.diseaseInfoModel[0].children[index]" class="padding-23 default-color"
               >{{ ns.disease_info_title_value
               }}{{ ns.disease_info_title_unit }}</span
             >
@@ -45,19 +47,17 @@
             )"
             :key="ns.id + index"
             class="sub-wrap"
-            :style="{ width: ns.portion + '%' }"
           >
-            <p>
-              <span class="TNM-label">{{ ns.disease_info_title }}:</span>
+            <p v-if=" diseaseInfo.diseaseInfoModel[0].children[index]">
+              <span class="TNM-label">{{ ns.disease_info_title  || '' }}:</span>
             </p>
-            <div class="sub-c-wrap">
+            <div class="sub-c-wrap" v-if=" diseaseInfo.diseaseInfoModel[0].children[index]">
               <p
                 class="sub-wrap"
                 v-for="schild in ns.children"
                 :key="schild.id"
-                :style="{ width: schild.portion + '%' }"
               >
-                <span class="TNM-label">{{ schild.disease_info_title }}:</span>
+                <span class="TNM-label">{{ schild.disease_info_title || ''}}:</span>
                 <span class="padding-23 default-color"
                   >{{ schild.disease_info_title_value
                   }}{{ schild.disease_info_title_unit }}</span
@@ -67,7 +67,10 @@
           </div>
         </div>
       </div>
-      <div class="clinical-info-middle-wrap">
+      <div
+        class="clinical-info-middle-wrap"
+        v-if="diseaseInfo.diseaseInfoModel[1]"
+      >
         <div class="clinical-top-wrap">
           <span class="xjtitle-color">{{
             diseaseInfo.diseaseInfoModel[1] &&
@@ -88,7 +91,10 @@
         <div class="clinical-m-middle-wrap">
           <div
             class="clinical-m-middle-l-wrap"
-            v-if="diseaseInfo.diseaseInfoModel[1]"
+            v-if="
+              diseaseInfo.diseaseInfoModel[1] &&
+                diseaseInfo.diseaseInfoModel[1].children
+            "
           >
             <p
               v-for="clinicalSsmtz in diseaseInfo.diseaseInfoModel[1]
@@ -113,7 +119,10 @@
         </div>
         <div
           class="clinical-m-middle-wrap"
-          v-if="diseaseInfo.diseaseInfoModel[1].children[2]"
+          v-if="
+            diseaseInfo.diseaseInfoModel[1] &&
+              diseaseInfo.diseaseInfoModel[1].children[2]
+          "
         >
           <div class="clinical-m-middle-tz-wrap">
             <p class="tx-label-wrap">
@@ -132,7 +141,10 @@
                 <p
                   :key="index"
                   class="xj-span-title default-color"
-                  v-if="item.disease_info_title_value === 'y'"
+                  v-if="
+                    diseaseInfo.diseaseInfoModel[1].children ||
+                      item.disease_info_title_value === 'y'
+                  "
                 >
                   {{ item.disease_info_title }}
                 </p>
@@ -140,7 +152,10 @@
             </div>
           </div>
         </div>
-        <div class="clinical-m-middle-wrap clinical-m-middle-tz-wrap-noline">
+        <div
+          class="clinical-m-middle-wrap clinical-m-middle-tz-wrap-noline"
+          v-if="diseaseInfo.diseaseInfoModel[1].children[1]"
+        >
           <div class="clinical-m-middle-tz-wrap">
             <p class="tx-label-wrap">
               <span class="TNM-label"
@@ -156,7 +171,10 @@
                   .children[1].children"
               >
                 <p
-                  v-if="item.disease_info_title_value === 'y'"
+                  v-if="
+                    diseaseInfo.diseaseInfoModel[1].children ||
+                      item.disease_info_title_value === 'y'
+                  "
                   :key="index"
                   class="xj-span-title default-color"
                 >
@@ -169,7 +187,13 @@
       </div>
     </div>
     <!-- 实验室检查部分 -->
-    <div class="info-wrap laboratory-info-wrap">
+    <div
+      class="info-wrap laboratory-info-wrap"
+      v-if="
+        diseaseInfo.diseaseInfoModel[2] &&
+          diseaseInfo.diseaseInfoModel[2].children
+      "
+    >
       <div class="l-i-top-wrap">
         <div
           class="clinical-m-middle-wrap laboratory-info-top-wrap laboratory-sys-wrap"
@@ -196,13 +220,19 @@
           <div v-if="child && child.children" class="xjtitle-color">
             {{ child.disease_info_title }} :
           </div>
+          <div v-else-if="child">{{ child.disease_info_title }} :</div>
           <div class="laboratory-sys-4-wrap">
             <div
               class="laboratory-sys-item-wrap"
               v-for="(item, index) in child.children"
               :key="index"
             >
-              <template v-if="item.disease_info_title_value != 'n'">
+              <template
+                v-if="
+                  diseaseInfo.diseaseInfoModel[1].children ||
+                    item.disease_info_title_value != 'n'
+                "
+              >
                 <p class="laboratory-title TNM-label ">
                   {{ item.disease_info_title }}
                 </p>
@@ -242,7 +272,7 @@
     </div>
     <div
       class="info-wrap p-pathology-info-wrap"
-      v-if="diseaseInfo.diseaseInfoModel[4]"
+      v-if="diseaseInfo.diseaseInfoModel[4] &&diseaseInfo.diseaseInfoModel[4].children"
     >
       <p class="clinical-title-wrap">
         <span class="xjtitle-color">{{
@@ -331,7 +361,7 @@
           </div>
           <div
             class="jwhistory-m-middle-wrap"
-            v-if="diseaseInfo.diseaseInfoModel[5].children"
+            v-if="diseaseInfo.diseaseInfoModel[5].children && diseaseInfo.diseaseInfoModel[5].children[0].disease_info_title_value"
           >
             <p
               v-for="(item,
@@ -380,7 +410,7 @@
                   v-for="(child, index) in diseaseInfo.diseaseInfoModel[3]
                     .children"
                   :key="index"
-                  :style="{ width: child.portion + '%' }"
+                  :style="{ width: child.portion ? child.portion : '' + '%' }"
                 >
                   <p class="laboratory-title TNM-label ">
                     {{ child.disease_info_title }}
@@ -398,7 +428,27 @@
                       }}{{ child.disease_info_title_unit }}</span
                     >
                   </p>
-                  <p class="laboratory-date RBC-date">{{ child.visit_time }}</p>
+                  <p class="laboratory-date RBC-date" v-if="child.visit_time">
+                    {{ child.visit_time }}
+                  </p>
+                  <p
+                    v-else-if="child.children"
+                    v-for="item in child.children"
+                    :key="item.id"
+                  >
+                    <span
+                      class="TNM-label"
+                      style="padding: 0; padding-bottom:8px;"
+                      >{{ item.disease_info_title }}</span
+                    ><span class="default-color" style="margin-left: 12px;"
+                      >{{ item.disease_info_title_value
+                      }}{{
+                        item.disease_info_title_unit
+                          ? item.disease_info_title_unit
+                          : ''
+                      }}</span
+                    >
+                  </p>
                 </div>
               </div>
             </div>
@@ -459,7 +509,7 @@ export default {
     },
     formatterChildren (arr, has) {
       const as = arr.filter(e => {
-        return has ? !e.children : e.children
+        return has ? !e?.children : e?.children
       })
       console.log(as)
       return as
