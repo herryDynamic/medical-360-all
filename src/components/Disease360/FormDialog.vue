@@ -1,19 +1,17 @@
 <template>
   <el-form ref="searchDialogForm" :model="searchDialogForm" label-width="80px">
-    <el-form-item label="临床分期">
+    <el-form-item
+      v-for="(item, index) in searchDataList"
+      :key="item.value"
+      :label="item.label"
+    >
       <el-radio-group v-model="searchDialogForm.theme">
         <el-radio
-          v-for="item in searchDataList"
+          v-for="item in searchDataList[index].children"
           :key="item.value"
           :label="item.value"
           >{{ item.label }}</el-radio
         >
-        <!-- <el-radio label="TNM"></el-radio>
-        <el-radio label="转移"></el-radio>
-        <el-radio label="BP"></el-radio>
-        <el-radio label="HR"></el-radio>
-        <el-radio label="T"></el-radio>
-        <el-radio label="P"></el-radio> -->
       </el-radio-group>
     </el-form-item>
     <el-button type="success" @click="ONADDSEARCHITEM('search')"
@@ -21,7 +19,6 @@
     >
   </el-form>
 </template>
-
 <script>
 import { mapState, mapMutations } from 'vuex'
 
@@ -40,41 +37,16 @@ export default {
         // 取的value值
         console.log(val.theme)
         const data = val.theme.split('-')
-        this.SEARCHDATAINDEX(data[0])
+        this.SEARCHDATAINDEX(data[0] + '-' + data[1])
       }
     }
   },
   data () {
-    return {
-      // searchDataList: [
-      //   {
-      //     label: 'TNM',
-      //     value: 'TNM'
-      //   },
-      //   {
-      //     label: '转移',
-      //     value: '转移'
-      //   },
-      //   {
-      //     label: 'BP',
-      //     value: 'BP'
-      //   },
-      //   {
-      //     label: 'HR',
-      //     value: 'HR'
-      //   },
-      //   {
-      //     label: 'T',
-      //     value: 'T'
-      //   },
-      //   {
-      //     label: 'P',
-      //     value: 'P'
-      //   }
-      // ]
-    }
+    return {}
   },
-  mounted () {},
+  mounted () {
+    console.log(this.searchDataList, 'this.searchDataList')
+  },
   methods: {
     ...mapMutations({
       ONADDSEARCHITEM: 'disease360/ONADDSEARCHITEM',

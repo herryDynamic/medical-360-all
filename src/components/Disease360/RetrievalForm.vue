@@ -53,7 +53,7 @@
                 })
               "
               suffix-icon="el-icon-plus"
-              v-model="fliter.theme.split('-')[2]"
+              v-model="fliter.theme.split('-')[3]"
             >
             </el-input>
             <!-- 关系下拉框 -->
@@ -74,6 +74,7 @@
             </el-select>
             <!-- 值域范围下拉框数据 -->
             <el-select
+              v-if="presentation_type !== '1'"
               v-model="fliter.range"
               placeholder="请选择"
               style="width:130px"
@@ -88,8 +89,8 @@
               >
               </el-option>
             </el-select>
-            <!-- <div
-              v-if="range.length <= 0"
+            <div
+              v-if="presentation_type === '1'"
               class="demo-input-size"
               style="width:130px;margin-left:20px;"
             >
@@ -100,7 +101,7 @@
                 v-model="fliter.range"
               >
               </el-input>
-            </div> -->
+            </div>
 
             <!-- 添加children -->
             <div style="padding-left: 20px">
@@ -151,7 +152,7 @@
                   })
                 "
                 suffix-icon="el-icon-plus"
-                v-model="child.theme.split('-')[2]"
+                v-model="child.theme.split('-')[3]"
               >
               </el-input>
             </div>
@@ -173,6 +174,7 @@
             </el-select>
             <!-- 值域范围下拉框数据 -->
             <el-select
+              v-if="presentation_type !== '1'"
               v-model="child.range"
               placeholder="请选择"
               style="width:130px"
@@ -187,6 +189,19 @@
               >
               </el-option>
             </el-select>
+            <div
+              v-if="presentation_type === '1'"
+              class="demo-input-size"
+              style="width:130px;margin-left:20px;"
+            >
+              <el-input
+                size="small"
+                placeholder="请输入内容"
+                suffix-icon="el-icon-date"
+                v-model="child.range"
+              >
+              </el-input>
+            </div>
             <!-- 删除一条children数据 -->
             <div style="padding-left: 20px">
               <el-button
@@ -239,6 +254,9 @@ export default {
     // 值域范围下拉框数据
     range: {
       type: Array
+    },
+    presentation_type: {
+      type: String
     }
   },
   methods: {

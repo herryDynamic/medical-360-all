@@ -5,9 +5,54 @@ import { zoom } from '@/utils/animate'
 import currentScience from '@/config'
 let preType
 const mutations = {
+  [TYPES.UPDATAONADDChILDFILTER] (state, v) {
+    var searchFiltersLengthNumList = 0
+    for (let i = 0; i < state.searchFilters.length; i++) {
+      searchFiltersLengthNumList += state.searchFilters[i]?.children.length
+    }
+
+    searchFiltersLengthNumList += state.searchFilters.length
+
+    const item = state.searchDataList[v.data2]?.children[v.data3]
+    if (state.treeListIndex.childIndex === null) {
+      state.searchFilters[state.treeListIndex.parentIndex].label =
+        item.disease_info_title
+      state.searchFilters[state.treeListIndex.parentIndex].value =
+        searchFiltersLengthNumList +
+        '-' +
+        item.id +
+        '-' +
+        item.disease_info_title
+      state.searchFilters[state.treeListIndex.parentIndex].publicInfoModel =
+        item.publicInfoModel
+    } else {
+      state.searchFilters[state.treeListIndex.parentIndex].children[
+        state.treeListIndex.childIndex
+      ].label = item.disease_info_title
+      state.searchFilters[state.treeListIndex.parentIndex].children[
+        state.treeListIndex.childIndex
+      ].value =
+        searchFiltersLengthNumList +
+        '-' +
+        item.id +
+        '-' +
+        item.disease_info_title
+      state.searchFilters[state.treeListIndex.parentIndex].children[
+        state.treeListIndex.childIndex
+      ].publicInfoModel = item.publicInfoModel
+    }
+  },
   // 添加children事件
   [TYPES.ONADDChILDFILTER] (state, v) {
-    const obj = { theme: '', condition: '', range: '' }
+    const obj = {
+      theme: '',
+      condition: '',
+      range: '',
+      presentation_type: null,
+      label: null,
+      value: null,
+      publicInfoModel: null
+    }
     state.searchFilters[v].children.push(obj)
   },
   // 删除children数据
@@ -21,7 +66,11 @@ const mutations = {
       theme: '',
       condition: '',
       range: '',
-      children: []
+      children: [],
+      presentation_type: null,
+      label: null,
+      value: null,
+      publicInfoModel: null
     }
     state.searchFilters.push(obj)
     console.warn(state.searchFilters)
@@ -34,7 +83,102 @@ const mutations = {
     state.searchDataList = Object.assign(data)
   },
   [TYPES.SEARCHDATAINDEX] (state, data) {
-    state.searchDataIndex = Number(data)
+    state.searchDataIndex = data
+  },
+  [TYPES.UPDATACHARTLIST] (state, data) {
+    const dataTest = []
+    for (let i = 0; i < Object.keys(data).length; i++) {
+      dataTest.push({
+        title: Object.keys(data)[i],
+        treatmentDataX: [],
+        treatmentDataY: []
+      })
+      const keydata = Object.keys(data)[i]
+      dataTest[i].treatmentDataX = Object.keys(data[keydata])
+      dataTest[i].treatmentDataY = Object.values(data[keydata])
+    }
+    console.log(dataTest)
+    state.chartList = dataTest
+  },
+  [TYPES.UPDATAONADDChILDFILTERTitle] (state, data) {
+    const updatDataList = JSON.parse(JSON.stringify(state.searchFilters))
+    for (let i = 0; i < state.searchFilters.length; i++) {
+      updatDataList.splice(i, 0, ...state.searchFilters[i]?.children)
+    }
+
+    // this.commit('UPDATACHARTTITLEDATA', updatDataList)
+    // [TYPES.UPDATACHARTTITLEDATA](updatDataList)
+    const header = updatDataList.map((item, index) => {
+      return {
+        name: item?.label || '',
+        index: String(index),
+        title: item?.label || ''
+      }
+    })
+    // 搜索后赋值
+    state.chartData.schema = JSON.parse(JSON.stringify(header))
+    state.chartData.parallelAxis = JSON.parse(JSON.stringify([]))
+    state.chartData.schemaNameTemporary = []
+    for (let i = 0; i < updatDataList.length; i++) {
+      state.chartData.parallelAxis.push({
+        dim: String(i),
+        name: updatDataList[i]?.label || '',
+        type: 'category',
+        data: [],
+        numType: 0
+      })
+
+      if (updatDataList[i].publicInfoModel) {
+        for (let j = 0; j < updatDataList[i].publicInfoModel?.length; j++) {
+          state.chartData.parallelAxis[i].data.push(
+            updatDataList[i].publicInfoModel[j].public_info_title
+          )
+        }
+      } else {
+        state.chartData.parallelAxis[i].numType = 1
+        state.chartData.schemaNameTemporary.push({
+          value: updatDataList[i].theme.split('-')[3],
+          index: i
+        })
+      }
+      if (updatDataList[i].publicInfoModel?.length === 0) {
+        state.chartData.parallelAxis[i].numType = 1
+        state.chartData.schemaNameTemporary.push({
+          value: updatDataList[i].theme.split('-')[3],
+          index: i
+        })
+        console.log(
+          state.chartData.schemaNameTemporary,
+          'state.chartData.schemaNameTemporary'
+        )
+      }
+    }
+    console.log(state.chartData, 'state.chartData')
+  },
+  [TYPES.UPDATACHARTDATAPARALLELAXISDATA] (state, res) {
+    for (
+      let index = 0;
+      index < state.chartData.schemaNameTemporary.length;
+      index++
+    ) {
+      const data2 = state.chartData.schemaNameTemporary[index].value
+      const dataIndex = state.chartData.schemaNameTemporary[index].index
+      const tempalData = res.data.list.map(item => {
+        return item[data2]
+      })
+
+      const r = tempalData.filter(function (element, index, self) {
+        return self.indexOf(element) === index
+      })
+
+      if (state.chartData.parallelAxis[dataIndex].numType === 1) {
+        state.chartData.parallelAxis[dataIndex].data = r
+      }
+    }
+    console.log(state.chartData.parallelAxis, 'parallelAxis')
+  },
+  [TYPES.CONDITIONLIST] (state, data) {
+    state.conditionList = data
   },
   // 修改图表展示数据
   [TYPES.CHARTDATA] (state, data) {
@@ -57,17 +201,9 @@ const mutations = {
         title: item.label
       }
     })
-    // state.chartData.schema = header
+    // 初始化赋值
     state.chartData.schema = JSON.parse(JSON.stringify(header))
     state.chartData.parallelAxis = JSON.parse(JSON.stringify([]))
-    // state.chartData.parallelAxis = data.map((item, index) => {
-    //   return Object.assign({
-    //     dim: index,
-    //     name: item.label,
-    //     type: 'category',
-    //     data: []
-    //   })
-    // })
     for (let i = 0; i < data.length; i++) {
       state.chartData.parallelAxis.push({
         dim: String(i),
@@ -100,8 +236,13 @@ const mutations = {
   [TYPES.SETFINISHED] (state, v) {
     Vue.set(state.diseaseInfoSelectData, 'finished', true)
   },
+
   // 搜索主题下拉框
   [TYPES.ONSHOWTOAST] (state, obj) {
+    console.log(obj, 'obj')
+    state.treeListIndex.parentIndex = obj.parentIndex
+    state.treeListIndex.childIndex = obj.childIndex
+
     // if (obj.parentIndex === 3 || obj.parentIndex === 4) return
     state.dialogShow = true
     if (obj.isSearch) {

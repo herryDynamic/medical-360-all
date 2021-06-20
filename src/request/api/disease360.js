@@ -11,12 +11,17 @@ const diease360 = {
   apiGetDiseaseInfoSelectHC: p => post('/v1/diseaseInfoSelect', p),
   // similarityCase: p => post('/v1/similarityCase', p),
   similarityCase: p =>
-    post(`/v1/similarityCase?pageIndex=${p.pageIndex}&pageSize=${p.pageSize}`, p),
+    post(
+      `/v1/similarityCase?pageIndex=${p.pageIndex}&pageSize=${p.pageSize}`,
+      p
+    ),
   // getSimilarityEntity: p => get(`/v1/getSimilarityEntity/${p}`),
   getSimilarityEntity: p => post('/v1/getSimilarityEntity', p),
+  getSimilarityEntityFlag: p => post('/v1/getSimilarityEntity?flag=1', p),
   exportDataModel: p => getBlob(`/v1/exportDataModel/${p.disease_name}`), // 生成导入模板
   importData: p => post('/v1/importData', p), // 导入Excel数据
-  similarityCaseSearh: p => post('/v1/similarityCaseSearh', p) // 查树状结构
+  similarityCaseSearh: p => post('/v1/similarityCaseSearh', p), // 查树状结构
+  conditionList: p => post(`v1/conditionList?diseaseName=${p.disease_name}`)
 }
 
 export default diease360

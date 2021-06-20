@@ -1,6 +1,16 @@
 const state = {
   searchFilters: [
-    { relation: '', theme: '', condition: '', range: '', children: [] }
+    {
+      relation: '',
+      theme: '',
+      condition: '',
+      range: '',
+      children: [],
+      presentation_type: null,
+      label: null,
+      value: null,
+      publicInfoModel: null
+    }
   ],
   searchDialogForm: {
     theme: ''
@@ -264,6 +274,11 @@ const state = {
       address: '普陀区金沙江路1699号鑫乐惠美食广场A13 '
     }
   ],
+  myChartTitleAndList: [],
+  treeListIndex: {
+    parentIndex: null, // 树当前选择的父级
+    childIndex: null // 树当前选项的子级
+  },
   chartData: {
     // 连线数据
     dataBJ: [
@@ -280,88 +295,43 @@ const state = {
       { name: 'M分期 ', index: '2', title: 'M分期' },
       { name: '疾病诊断 ', index: '3', title: '疾病诊断' }
     ],
-    parallelAxis: []
+    parallelAxis: [
+      {
+        dim: 0,
+        name: 'T分期',
+        type: 'category',
+        data: ['T2a', 'T3a']
+      },
+      {
+        dim: 1,
+        name: 'N分期',
+        type: 'category',
+        data: ['N1', 'N0']
+      }
+    ],
+    schemaNameTemporary: [] // 临时存储没有下拉框的title
   },
+  conditionList: [],
   chartList: [
     {
       title: '死亡率/死因',
-      data: [
-        {
-          value: 35,
-          name: '活着'
-        },
-        {
-          value: 100,
-          name: '原发性肿瘤相关死亡'
-        },
-        {
-          value: 34,
-          name: '其他肿瘤相关死亡'
-        },
-        {
-          value: 0,
-          name: '氏癌'
-        }
-      ],
-      legend: ['活着', '原发性肿瘤相关死亡', '其他肿瘤相关死亡', '氏癌']
+      treatmentDataX: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月'],
+      treatmentDataY: [30, 10]
     },
     {
       title: '5年复发率',
-      data: [
-        {
-          value: 5,
-          name: '复发'
-        },
-        {
-          value: 75,
-          name: '不复发'
-        },
-        {
-          value: 2,
-          name: '未知'
-        }
-      ],
-      legend: ['复发', '不复发', '未知']
+      treatmentDataX: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月'],
+      treatmentDataY: [30, 10]
     },
     {
       title: '5年复发分布',
-      data: [
-        {
-          value: 0,
-          name: '奥卡尔'
-        },
-        {
-          value: 0,
-          name: '淋巴结点'
-        },
-        {
-          value: 100,
-          name: '远点'
-        }
-      ],
-      legend: ['奥卡尔', '淋巴结点', '远点']
+      treatmentDataX: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月'],
+      treatmentDataY: [30, 10]
     },
     {
       title: '5年元转移',
-      data: [
-        {
-          value: 0,
-          name: '脑'
-        },
-        {
-          value: 0,
-          name: '骨'
-        },
-        {
-          value: 0,
-          name: '肝脏'
-        },
-        {
-          value: 100,
-          name: '多重'
-        }
-      ],
-      legend: ['肝脏', '肺', '脑', '骨', '多重']
+      treatmentDataX: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月'],
+      treatmentDataY: [30, 10]
     }
   ]
 }
