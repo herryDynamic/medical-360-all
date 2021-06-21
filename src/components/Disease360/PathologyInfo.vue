@@ -69,12 +69,12 @@
       </div>
       <div
         class="clinical-info-middle-wrap"
-        v-if="diseaseInfo.diseaseInfoModel[1]"
+        v-if="diseaseInfo.diseaseInfoModel[2]"
       >
         <div class="clinical-top-wrap">
           <span class="xjtitle-color">{{
-            diseaseInfo.diseaseInfoModel[1] &&
-              diseaseInfo.diseaseInfoModel[1].disease_info_title
+            diseaseInfo.diseaseInfoModel[2] &&
+              diseaseInfo.diseaseInfoModel[2].disease_info_title
           }}</span
           ><i
             class="el-icon-edit"
@@ -92,12 +92,12 @@
           <div
             class="clinical-m-middle-l-wrap"
             v-if="
-              diseaseInfo.diseaseInfoModel[1] &&
-                diseaseInfo.diseaseInfoModel[1].children
+              diseaseInfo.diseaseInfoModel[2] &&
+                diseaseInfo.diseaseInfoModel[2].children
             "
           >
             <p
-              v-for="clinicalSsmtz in diseaseInfo.diseaseInfoModel[1]
+              v-for="clinicalSsmtz in diseaseInfo.diseaseInfoModel[2]
                 .children[0].children"
               :key="clinicalSsmtz.id"
             >
@@ -120,29 +120,29 @@
         <div
           class="clinical-m-middle-wrap"
           v-if="
-            diseaseInfo.diseaseInfoModel[1] &&
-              diseaseInfo.diseaseInfoModel[1].children[2]
+            diseaseInfo.diseaseInfoModel[2] &&
+              diseaseInfo.diseaseInfoModel[2].children[2]
           "
         >
           <div class="clinical-m-middle-tz-wrap">
             <p class="tx-label-wrap">
               <span class="TNM-label"
                 >{{
-                  diseaseInfo.diseaseInfoModel[1].children[2]
+                  diseaseInfo.diseaseInfoModel[2].children[2]
                     .disease_info_title
                 }}:</span
               >
             </p>
             <div class="tz-r-wrap">
               <template
-                v-for="(item, index) in diseaseInfo.diseaseInfoModel[1]
+                v-for="(item, index) in diseaseInfo.diseaseInfoModel[2]
                   .children[2].children"
               >
                 <p
                   :key="index"
                   class="xj-span-title default-color"
                   v-if="
-                    diseaseInfo.diseaseInfoModel[1].children ||
+                    diseaseInfo.diseaseInfoModel[2].children ||
                       item.disease_info_title_value === 'y'
                   "
                 >
@@ -154,25 +154,25 @@
         </div>
         <div
           class="clinical-m-middle-wrap clinical-m-middle-tz-wrap-noline"
-          v-if="diseaseInfo.diseaseInfoModel[1].children[1]"
+          v-if="diseaseInfo.diseaseInfoModel[2].children[1]"
         >
           <div class="clinical-m-middle-tz-wrap">
             <p class="tx-label-wrap">
               <span class="TNM-label"
                 >{{
-                  diseaseInfo.diseaseInfoModel[1].children[1]
+                  diseaseInfo.diseaseInfoModel[2].children[1]
                     .disease_info_title
                 }}:</span
               >
             </p>
             <div class="tz-r-wrap">
               <template
-                v-for="(item, index) in diseaseInfo.diseaseInfoModel[1]
+                v-for="(item, index) in diseaseInfo.diseaseInfoModel[2]
                   .children[1].children"
               >
                 <p
                   v-if="
-                    diseaseInfo.diseaseInfoModel[1].children ||
+                    diseaseInfo.diseaseInfoModel[2].children ||
                       item.disease_info_title_value === 'y'
                   "
                   :key="index"
@@ -190,19 +190,19 @@
     <div
       class="info-wrap laboratory-info-wrap"
       v-if="
-        diseaseInfo.diseaseInfoModel[2] &&
-          diseaseInfo.diseaseInfoModel[2].children
+        diseaseInfo.diseaseInfoModel[1] &&
+          diseaseInfo.diseaseInfoModel[1].children
       "
     >
       <div class="l-i-top-wrap">
         <div
           class="clinical-m-middle-wrap laboratory-info-top-wrap laboratory-sys-wrap"
-          v-for="(child, index) in diseaseInfo.diseaseInfoModel[2].children"
+          v-for="(child, index) in diseaseInfo.diseaseInfoModel[1].children"
           :key="index"
         >
           <p class="clinical-title-wrap" v-if="index === 0">
             <span class="xjtitle-color">{{
-              diseaseInfo.diseaseInfoModel[2].disease_info_title
+              diseaseInfo.diseaseInfoModel[1].disease_info_title
             }}</span
             ><i
               class="el-icon-edit"
