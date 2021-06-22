@@ -1,7 +1,11 @@
 <template>
   <div class="pathology-info-ctn-wrap">
     <div class="info-wrap clinical-info-wrap">
-      <div class="clinical-info-top-wrap" ref="infoTopWrap0">
+      <div
+        class="clinical-info-top-wrap"
+        ref="infoTopWrap0"
+        v-if="diseaseInfo.diseaseInfoModel[0].children[0]"
+      >
         <div class="clinical-top-wrap">
           <!-- 诊断分期：diseaseInfo.diseaseInfoModel[0].children[0] -->
           <span class="xjtitle-color">{{
@@ -123,7 +127,10 @@
                 }}:</span
               >
             </p>
-            <div class="tz-r-wrap">
+            <div
+              class="tz-r-wrap"
+              v-if="diseaseInfo.diseaseInfoModel[0].children[3].children"
+            >
               <template
                 v-for="(item, index) in diseaseInfo.diseaseInfoModel[0]
                   .children[3].children"
@@ -134,6 +141,19 @@
                   v-if="item.disease_info_title_value === 'y'"
                 >
                   {{ item.disease_info_title }}
+                </p>
+              </template>
+            </div>
+            <div
+              class="tz-r-wrap"
+              v-if="!diseaseInfo.diseaseInfoModel[0].children[3].children"
+            >
+              <template>
+                <p class="xj-span-title default-color">
+                  {{
+                    diseaseInfo.diseaseInfoModel[0].children[3]
+                      .disease_info_title_value
+                  }}
                 </p>
               </template>
             </div>
@@ -149,7 +169,10 @@
                 }}:</span
               >
             </p>
-            <div class="tz-r-wrap">
+            <div
+              class="tz-r-wrap"
+              v-if="diseaseInfo.diseaseInfoModel[0].children[2].children"
+            >
               <template
                 v-for="(item, index) in diseaseInfo.diseaseInfoModel[0]
                   .children[2].children"
@@ -160,6 +183,19 @@
                   class="xj-span-title default-color"
                 >
                   {{ item.disease_info_title }}
+                </p>
+              </template>
+            </div>
+            <div
+              class="tz-r-wrap"
+              v-if="!diseaseInfo.diseaseInfoModel[0].children[2].children"
+            >
+              <template>
+                <p class="xj-span-title default-color">
+                  {{
+                    diseaseInfo.diseaseInfoModel[0].children[2]
+                      .disease_info_title_value
+                  }}
                 </p>
               </template>
             </div>

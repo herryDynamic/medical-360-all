@@ -1,7 +1,7 @@
 <template>
   <!-- <！-- 表格里面的数据源 -->
   <div class="chart-table-wrap">
-    <el-table style="width: 100%" :data="tableData" border stripe>
+    <el-table height="450" style="width: 100%" :data="tableData" border stripe>
       <!--
       设置表头数据源，并循环渲染出来，property对应列内容的字段名，详情见下面的数据源格式
       -->
