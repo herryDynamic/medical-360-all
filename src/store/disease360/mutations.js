@@ -253,7 +253,7 @@ const mutations = {
         localStorage.getItem('diseaseInfoModel')
       )
       state.componentForm = 'FormDialogEdit'
-      state.dialogTitle = diseaseInfoModel[obj.childIndex].disease_info_title
+      state.dialogTitle = diseaseInfoModel[obj.childIndex]?.disease_info_title
       let vultArr = []
       const recursiveArr = function (arr) {
         if (Array.isArray(arr)) {

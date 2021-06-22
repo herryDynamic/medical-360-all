@@ -20,7 +20,10 @@
             "
           ></i>
         </div>
-        <div class="clinical-middle-wrap">
+        <div
+          class="clinical-middle-wrap"
+          v-if="diseaseInfo.diseaseInfoModel[0].children[0]"
+        >
           <div
             v-for="(ns, index) in formatterChildren(
               diseaseInfo.diseaseInfoModel[0].children[0].children,
@@ -404,7 +407,6 @@
           </div>
           <p style="padding-left:40px;padding-bottom:20px;">......</p>
         </div>
-        <!-- 非实验室检查 -->
         <div class="clinical-info-middle-wrap">
           <div class="l-i-bottom-wrap l-i-top-wrap">
             <div

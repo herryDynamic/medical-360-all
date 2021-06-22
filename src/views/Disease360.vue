@@ -14,11 +14,23 @@
     </div>
     <div class="pathology-info-wrap">
       <PathologyInfo
-        v-if="!diseaseInfoSelectData.fullscreenLoading && diseaseInfoSelectData"
+        v-if="
+          !diseaseInfoSelectData.fullscreenLoading &&
+            rightDraweTabs[0].count === 0
+        "
         :diseaseInfo="diseaseInfoSelectData"
         class="pathology-info-content-wrap"
         :pathologyInfo="diseaseInfoSelectData.pathologyInfo"
       ></PathologyInfo>
+      <PathologyInfoQZ
+        v-if="
+          !diseaseInfoSelectData.fullscreenLoading &&
+            rightDraweTabs[0].count === 1
+        "
+        :diseaseInfo="diseaseInfoSelectData"
+        class="pathology-info-content-wrap"
+        :pathologyInfo="diseaseInfoSelectData.pathologyInfo"
+      ></PathologyInfoQZ>
       <!-- <PathologyInfoNew v-if = '!diseaseInfoSelectData.fullscreenLoading && diseaseInfoSelectData' :diseaseInfo = 'diseaseInfoSelectData' class="pathology-info-content-wrap" :pathologyInfo = 'diseaseInfoSelectData.pathologyInfo'></PathologyInfoNew> -->
       <Empty
         v-if="
@@ -96,6 +108,7 @@ import PatientInfo from '@/components/Disease360/PatientInfo'
 import FormDialog from '@/components/Disease360/FormDialog'
 import FormDialogEdit from '@/components/Disease360/FormDialogEdit'
 import PathologyInfo from '@/components/Disease360/PathologyInfo'
+import PathologyInfoQZ from '@/components/Disease360/PathologyInfoQZ'
 import PathologyInfoNew from '@/components/Disease360/PathologyInfoNew'
 import SchemeRecommendation from '@/components/Disease360/SchemeRecommendation'
 import SimilarCases from '@/components/Disease360/SimilarCases'
@@ -106,6 +119,7 @@ import { mapMutations, mapState } from 'vuex'
 export default {
   components: {
     PatientInfo,
+    PathologyInfoQZ,
     PathologyInfoNew,
     FormDialog,
     FormDialogEdit,
