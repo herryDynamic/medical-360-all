@@ -10,13 +10,14 @@
         :key="info.key"
         :property="info.key"
         :label="info.label"
+        align="center"
       >
         <template slot-scope="scope">
-          {{ scope.row[scope.column.property] }}
+          {{ scope.row[scope.column.property] || '-' }}
           <!-- 渲染对应表格里面的内容 -->
         </template>
       </el-table-column>
-      <el-table-column label="患者详情">
+      <el-table-column label="患者详情" align="center">
         <template slot-scope="scope"
           ><span class="detail-span" @click="onDetail(scope.row)"
             >患者详情</span

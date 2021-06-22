@@ -96,6 +96,9 @@ const mutations = {
       const keydata = Object.keys(data)[i]
       dataTest[i].treatmentDataX = Object.keys(data[keydata])
       dataTest[i].treatmentDataY = Object.values(data[keydata])
+      dataTest[i].treatmentDataY = dataTest[i].treatmentDataY.map(item => {
+        return item.toFixed(2)
+      })
     }
     console.log(dataTest)
     state.chartList = dataTest
