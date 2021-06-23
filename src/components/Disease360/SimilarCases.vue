@@ -412,7 +412,7 @@ export default {
         .getSimilarityEntity(param)
         .then(res => {
           const headerData = res.data.filter((item, i) => {
-            return item.presentation_type === '3'
+            return item.icon_top_is === '1'
           })
           // const headerData = res.data
           console.log(headerData, 'headerData')
@@ -430,9 +430,9 @@ export default {
             label: '相似度',
             key: 'scop'
           })
-          // 赋值下拉框数据:取全部值
+          // 赋值下拉框数据:取列表展示icon_top_is为1的值
           let searchDataListSearchData = []
-          searchDataListSearchData = res.data.map((item, index) => {
+          searchDataListSearchData = headerData.map((item, index) => {
             return {
               label: item?.disease_info_title || '',
               value: index + '-' + item.id + '-' + item.disease_info_title,
