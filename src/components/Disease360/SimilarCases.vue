@@ -527,6 +527,7 @@ export default {
         query: { disease_name: localStorage.getItem('disease_name') }
       })
       localStorage.patientId = val.患者ID
+      localStorage.numHospital = val.住院次数
       window.open(routeUrl.href, '_blank')
 
       // this.dialogTableVisible = true

@@ -226,6 +226,10 @@
               "
             ></i>
           </p>
+          <!-- 实验室检查下每个小标题 -->
+          <div v-if="child && child.children" class="xjtitle-color">
+            {{ child.disease_info_title }} :
+          </div>
           <div class="laboratory-sys-4-wrap">
             <div
               class="laboratory-sys-item-wrap"
