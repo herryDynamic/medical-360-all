@@ -159,6 +159,51 @@
             </div>
           </div>
         </div>
+        <div
+          class="clinical-m-middle-wrap"
+          v-if="diseaseInfo.diseaseInfoModel[0].children[4]"
+        >
+          <div class="clinical-m-middle-tz-wrap">
+            <p class="tx-label-wrap">
+              <span class="TNM-label"
+                >{{
+                  diseaseInfo.diseaseInfoModel[0].children[4]
+                    .disease_info_title
+                }}:</span
+              >
+            </p>
+            <div
+              class="tz-r-wrap"
+              v-if="diseaseInfo.diseaseInfoModel[0].children[4].children"
+            >
+              <template
+                v-for="(item, index) in diseaseInfo.diseaseInfoModel[0]
+                  .children[3].children"
+              >
+                <p
+                  :key="index"
+                  class="xj-span-title default-color"
+                  v-if="item.disease_info_title_value === 'y'"
+                >
+                  {{ item.disease_info_title }}
+                </p>
+              </template>
+            </div>
+            <div
+              class="tz-r-wrap"
+              v-if="!diseaseInfo.diseaseInfoModel[0].children[4].children"
+            >
+              <template>
+                <p class="xj-span-title default-color">
+                  {{
+                    diseaseInfo.diseaseInfoModel[0].children[4]
+                      .disease_info_title_value
+                  }}
+                </p>
+              </template>
+            </div>
+          </div>
+        </div>
         <div class="clinical-m-middle-wrap clinical-m-middle-tz-wrap-noline">
           <div class="clinical-m-middle-tz-wrap">
             <p class="tx-label-wrap">
