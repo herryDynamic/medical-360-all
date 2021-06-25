@@ -7,7 +7,7 @@ import echarts from 'echarts'
 // import resize from './mixins/resize'
 
 export default {
-//   mixins: [resize],
+  //   mixins: [resize],
   props: {
     direction: {
       // 横向还是纵向
@@ -62,6 +62,7 @@ export default {
     }
   },
   mounted () {
+    console.log(this.dataX, this.dataY, 'dataxanddatay')
     this.initChart()
   },
   beforeDestroy () {
@@ -123,7 +124,7 @@ export default {
             axisLabel: {
               color: '#999999',
               // interval: 0, // 横轴信息全部显示
-              rotate: -40 // -30度角倾斜显示
+              rotate: -45 // -30度角倾斜显示
             }, // 设置轴线的属性
             axisLine: {
               lineStyle: {
@@ -169,7 +170,8 @@ export default {
           {
             name: this.nameY,
             type: 'bar',
-            barMaxWidth: '20',
+            barMaxWidth: 30,
+            barGap: '100%' /* 多个并排柱子设置柱子之间的间距 */,
             data: this.direction ? this.dataX : this.dataY,
             // 移入当前的柱状图时改变颜色
             itemStyle: {

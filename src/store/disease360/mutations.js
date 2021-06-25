@@ -85,22 +85,90 @@ const mutations = {
   [TYPES.SEARCHDATAINDEX] (state, data) {
     state.searchDataIndex = data
   },
+  [TYPES.UPDATACHARTLISTPIE] (state, data) {
+    const dataTest = []
+    for (let i = 0; i < Object.keys(data).length; i++) {
+      dataTest.push({
+        title: Object.keys(data)[i],
+        data: []
+      })
+      // const keydata = Object.keys(data)[i]
+
+      // dataTest[i].treatmentDataX = Object.keys(data[keydata])
+      // dataTest[i].treatmentDataY = Object.values(data[keydata])
+      // dataTest[i].treatmentDataY = dataTest[i].treatmentDataY.map(item => {
+      //   return item.toFixed(2)
+      // })
+    }
+    console.log(dataTest)
+    state.chartList = dataTest
+  },
+  // 修改柱状图数据
   [TYPES.UPDATACHARTLIST] (state, data) {
     const dataTest = []
+
     for (let i = 0; i < Object.keys(data).length; i++) {
       dataTest.push({
         title: Object.keys(data)[i],
         treatmentDataX: [],
         treatmentDataY: []
       })
-      const keydata = Object.keys(data)[i]
-      dataTest[i].treatmentDataX = Object.keys(data[keydata])
-      dataTest[i].treatmentDataY = Object.values(data[keydata])
-      dataTest[i].treatmentDataY = dataTest[i].treatmentDataY.map(item => {
-        return item.toFixed(2)
+
+      const keydata = Object.keys(data)[i] // 当前data对象中的某个对象名
+      // dataTest[i].treatmentDataX =  Object.keys(data[keydata])
+      // dataTest[i].treatmentDataY = Object.values(data[keydata])
+      // dataTest[i].treatmentDataY = dataTest[i].treatmentDataY.map(item => {
+      //   return item.toFixed(2)
+      // })
+      dataTest[i].treatmentDataX = data[keydata].map((item, index) => {
+        return item.title
+      })
+      // 只要前十个，解决相隔无字
+      dataTest[i].treatmentDataX = dataTest[i].treatmentDataX.splice(0, 10)
+      dataTest[i].treatmentDataY = data[keydata].map(item => {
+        return Number(item.percent.toFixed(2))
       })
     }
-    console.log(dataTest)
+    // 过滤掉无值的
+    // const dataValue = dataTest.filter(item => {
+    //   return item.treatmentDataX.length > 0
+    // })
+    // state.chartList = dataValue
+
+    state.chartList = dataTest
+  },
+  [TYPES.UPDATACHARTLISTDEFAULT] (state, data) {
+    const dataTest = []
+
+    for (let i = 0; i < Object.keys(data).length; i++) {
+      dataTest.push({
+        title: Object.keys(data)[i],
+        treatmentDataX: [],
+        treatmentDataY: []
+      })
+
+      const keydata = Object.keys(data)[i] // 当前data对象中的某个对象名
+      // dataTest[i].treatmentDataX =  Object.keys(data[keydata])
+      // dataTest[i].treatmentDataY = Object.values(data[keydata])
+      // dataTest[i].treatmentDataY = dataTest[i].treatmentDataY.map(item => {
+      //   return item.toFixed(2)
+      // })
+      dataTest[i].treatmentDataX = data[keydata].map((item, index) => {
+        return item.title
+      })
+      // 只要前十个，解决相隔无字
+      dataTest[i].treatmentDataX = dataTest[i].treatmentDataX.splice(0, 10)
+      dataTest[i].treatmentDataY = data[keydata].map(item => {
+        return Number(item.percent.toFixed(2))
+      })
+    }
+    // 过滤掉无值的
+    // const dataValue = dataTest.filter(item => {
+    //   return item.treatmentDataX.length > 0
+    // })
+    // state.chartList = dataValue
+
+    state.chartListDefault = dataTest
     state.chartList = dataTest
   },
   [TYPES.UPDATAONADDChILDFILTERTitle] (state, data) {

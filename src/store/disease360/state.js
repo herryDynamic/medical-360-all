@@ -279,6 +279,90 @@ const state = {
     parentIndex: null, // 树当前选择的父级
     childIndex: null // 树当前选项的子级
   },
+
+  conditionList: [],
+  chartListPie: [
+    {
+      title: '死亡率/死因',
+      data: [
+        {
+          value: 35,
+          name: '活着'
+        },
+        {
+          value: 100,
+          name: '原发性肿瘤相关死亡'
+        },
+        {
+          value: 34,
+          name: '其他肿瘤相关死亡'
+        },
+        {
+          value: 0,
+          name: '氏癌'
+        }
+      ],
+      legend: ['活着', '原发性肿瘤相关死亡', '其他肿瘤相关死亡', '氏癌']
+    },
+    {
+      title: '5年复发率',
+      data: [
+        {
+          value: 5,
+          name: '复发'
+        },
+        {
+          value: 75,
+          name: '不复发'
+        },
+        {
+          value: 2,
+          name: '未知'
+        }
+      ],
+      legend: ['复发', '不复发', '未知']
+    },
+    {
+      title: '5年复发分布',
+      data: [
+        {
+          value: 0,
+          name: '奥卡尔'
+        },
+        {
+          value: 0,
+          name: '淋巴结点'
+        },
+        {
+          value: 100,
+          name: '远点'
+        }
+      ],
+      legend: ['奥卡尔', '淋巴结点', '远点']
+    },
+    {
+      title: '5年元转移',
+      data: [
+        {
+          value: 0,
+          name: '脑'
+        },
+        {
+          value: 0,
+          name: '骨'
+        },
+        {
+          value: 0,
+          name: '肝脏'
+        },
+        {
+          value: 100,
+          name: '多重'
+        }
+      ],
+      legend: ['肝脏', '肺', '脑', '骨', '多重']
+    }
+  ],
   chartData: {
     // 连线数据
     dataBJ: [
@@ -311,12 +395,87 @@ const state = {
     ],
     schemaNameTemporary: [] // 临时存储没有下拉框的title
   },
-  conditionList: [],
+  chartDataDefault: {
+    // 连线数据
+    dataBJ: [
+      ['T2a', 'N1', 'M0', '膀胱癌', '', 'G1', '单发', '无CIS'],
+      ['T3a', 'N1', 'M1b', '膀胱癌', '', 'G1', '单发', '无CIS', '2'],
+      ['T3a', 'N0', 'M0', '膀胱癌', 'G3', '单发', '无CIS', '3']
+    ],
+    // dataGZ: [['结肠', 2, 2, 1, 1.39, '腺癌']],
+    // dataSH: [['结肠', 3, 2, 1, 0.82, '腺癌']],
+    // title名字
+    schema: [
+      { name: 'T分期 ', index: '0', title: 'T分期' },
+      { name: 'N分期 ', index: '1', title: 'N分期' },
+      { name: 'M分期 ', index: '2', title: 'M分期' },
+      { name: '疾病诊断 ', index: '3', title: '疾病诊断' }
+    ],
+    parallelAxis: [
+      {
+        dim: 0,
+        name: 'T分期',
+        type: 'category',
+        data: ['T2a', 'T3a']
+      },
+      {
+        dim: 1,
+        name: 'N分期',
+        type: 'category',
+        data: ['N1', 'N0']
+      }
+    ],
+    schemaNameTemporary: [] // 临时存储没有下拉框的title
+  },
   chartList: [
     {
       title: '死亡率/死因',
+      treatmentDataX: [
+        'CTU',
+        'MRU',
+        'PET-CT',
+        '心电图',
+        '胸部CT',
+        '盆腔MR',
+        '盆腔CT',
+        '胸部正侧位X线',
+        '膀胱超声',
+        '膀胱镜'
+      ],
+      treatmentDataY: [30, 10, 30, 60, 100, 40, 49, 39, 40, 20, 40, 100, 10]
+    },
+    {
+      title: '5年复发率',
       treatmentDataX: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月'],
       treatmentDataY: [30, 10]
+    },
+    {
+      title: '5年复发分布',
+      treatmentDataX: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月'],
+      treatmentDataY: [30, 10]
+    },
+    {
+      title: '5年元转移',
+      treatmentDataX: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月'],
+      treatmentDataY: [30, 10]
+    }
+  ],
+  chartListDefault: [
+    {
+      title: '死亡率/死因',
+      treatmentDataX: [
+        'CTU',
+        'MRU',
+        'PET-CT',
+        '心电图',
+        '胸部CT',
+        '盆腔MR',
+        '盆腔CT',
+        '胸部正侧位X线',
+        '膀胱超声',
+        '膀胱镜'
+      ],
+      treatmentDataY: [30, 10, 30, 60, 100, 40, 49, 39, 40, 20, 40, 100, 10]
     },
     {
       title: '5年复发率',

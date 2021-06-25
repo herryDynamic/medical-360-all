@@ -1,7 +1,7 @@
 <template>
   <div class="similar-case-wrap">
     <el-tabs v-model="activeName" @tab-click="onTabClick">
-      <el-tab-pane label="列表展示" name="list">
+      <el-tab-pane label="相似病例" name="list">
         <div class="chart-wrap list-wrap shadow">
           <SearchChartTable
             :tableData="tableData"
@@ -19,8 +19,46 @@
           >
           </el-pagination>
         </div>
+        <div class="chart-wrap chart-wrap-content shadow">
+          <!-- 曲线图 -->
+          <div
+            id="myChartDefault"
+            :style="{ width: `${screenWidth * 0.8}px`, height: '300px' }"
+          ></div>
+
+          <!-- 柱状图 -->
+          <div class="doughnut-wrap shadow">
+            <div class="doughnut-top-wrap">
+              <p>
+                <span>共发现{{ total }}个相似病人</span>
+                <!-- <span>共计3203(1.01%)</span> -->
+              </p>
+            </div>
+
+            <div class="chart-pie-wrap">
+              <div
+                class="d-chart-wrap"
+                v-for="(chart, index) in chartListDefault"
+                :key="index"
+              >
+                <Bar
+                  :id="'tempale' + index"
+                  :style="{
+                    width: `${screenWidth * 0.8 * 0.25}px`,
+                    height: '400px'
+                  }"
+                  :title="chart.title"
+                  titleLocal="left"
+                  :dataX="chart.treatmentDataX"
+                  :dataY="chart.treatmentDataY"
+                  :direction="direction"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </el-tab-pane>
-      <el-tab-pane label="图表展示" name="chart">
+      <el-tab-pane label="自定义搜索" name="chart">
         <div class="chart-wrap chart-wrap-content shadow">
           <div class="search-wrap">
             <span>{{ changeTitle }}</span>
@@ -30,16 +68,19 @@
                 class="ld-icon"
               ></i>
               <i
+                v-if="department === '全科'"
                 @click="onChangeComponent({ val: 3, title: '疾病模板' })"
                 class="ai-icon"
               ></i>
             </div>
           </div>
+          <!-- 曲线图 -->
           <div
             v-show="isShowEchart === 1"
             id="myChart"
             :style="{ width: `${screenWidth * 0.8}px`, height: '300px' }"
           ></div>
+          <!-- 高级搜索 -->
           <div v-show="isShowEchart === 2" class="form-wrap">
             <RetrievalForm
               :form="form"
@@ -52,12 +93,14 @@
               :presentation_type="presentation_type"
             ></RetrievalForm>
           </div>
+          <!-- ai检索 -->
           <div v-show="isShowEchart === 3" class="form-wrap">
             <AISearchGroup
               @onSubmitAI="onSubmitAI"
               :groups="groups"
             ></AISearchGroup>
           </div>
+          <!-- 柱状图 -->
           <div class="doughnut-wrap shadow">
             <div class="doughnut-top-wrap">
               <p>
@@ -65,10 +108,11 @@
                 <!-- <span>共计3203(1.01%)</span> -->
               </p>
             </div>
+            <!-- 饼形图 -->
             <!-- <div class="chart-pie-wrap">
               <div
                 class="d-chart-wrap"
-                v-for="(chart, index) in chartList"
+                v-for="(chart, index) in chartListPie"
                 :key="index"
               >
                 <div
@@ -166,6 +210,7 @@ export default {
   },
   data () {
     return {
+      department: localStorage.getItem('department'),
       groups: [],
       treatmentDataX: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月'],
       treatmentDataY: [30, 10],
@@ -213,7 +258,7 @@ export default {
       tableTotal: 0,
       total: 0,
       pageIndex: 1,
-      pageSize: 20,
+      pageSize: 10,
       tableData: [
         // {
         //   id: 221,
@@ -237,14 +282,17 @@ export default {
       searchFilters: state => state.disease360.searchFilters,
       chartData: state => state.disease360.chartData,
       chartList: state => state.disease360.chartList,
+      chartListDefault: state => state.disease360.chartListDefault,
+      chartListPie: state => state.disease360.chartListPie,
       searchDataList: state => state.disease360.searchDataList,
       searchDataIndex: state => state.disease360.searchDataIndex,
       conditionListData: state => state.disease360.conditionList
     })
   },
   mounted () {
+    // 饼形图两个初始化方法
     // this.initData()
-    // this.chartList.forEach((chart, index) => {
+    // this.chartListPie.forEach((chart, index) => {
     //   this.chartPieInit(chart, index)
     // })
     this.similarityCase()
@@ -309,6 +357,8 @@ export default {
       UPDATACHARTTITLEDATA: 'disease360/UPDATACHARTTITLEDATA',
       UPDATAONADDChILDFILTERTitle: 'disease360/UPDATAONADDChILDFILTERTitle',
       UPDATACHARTLIST: 'disease360/UPDATACHARTLIST',
+      UPDATACHARTLISTPIE: 'disease360/UPDATACHARTLISTPIE',
+      UPDATACHARTLISTDEFAULT: 'disease360/UPDATACHARTLISTDEFAULT',
       CONDITIONLIST: 'disease360/CONDITIONLIST',
       UPDATACHARTDATAPARALLELAXISDATA:
         'disease360/UPDATACHARTDATAPARALLELAXISDATA'
@@ -318,6 +368,9 @@ export default {
         disease_name: localStorage.getItem('disease_name')
       }
       diease360.conditionList(param).then(res => {
+        if (!res.data) {
+          return
+        }
         console.log(res, 'conditionList')
         const data = JSON.parse(res.data[0].conditions)
         console.log(data, 'onditionListData')
@@ -365,6 +418,7 @@ export default {
           // this.tableData = res.data.filter((item, i) => {
           //   return parseInt(item.scop) >= 50
           // })
+          this.UPDATACHARTLISTDEFAULT(res.statistics)
 
           this.tableData.forEach(element => {
             if (element.scop) {
@@ -537,7 +591,9 @@ export default {
       ONDELFLITER: 'disease360/ONDELFLITER',
       UPDATAONADDChILDFILTER: 'disease360/UPDATAONADDChILDFILTER'
     }),
+    // 高级检索事件
     onSubmit () {
+      // 假数据误删
       const data = {
         disease_name: localStorage.getItem('disease_name'),
         sign: [
@@ -602,11 +658,11 @@ export default {
       }
 
       data.sign = dataTable
-      this.UPDATAONADDChILDFILTERTitle()
+      this.UPDATAONADDChILDFILTERTitle() // 修改线条图的title
 
       disease360.similarityCaseSearh(data).then(res => {
         if (res.status === '0') {
-          // 赋值表格
+          // // 赋值表格
           // this.tableData = res.data
           // this.tableData.forEach(element => {
           //   if (element.scop) {
@@ -622,8 +678,9 @@ export default {
           // 去掉scop属性
           // this.removeByValue(this.HeaderData, 'key', 'scop')
 
-          this.CHARTDATA(data)
+          this.CHARTDATA(data) // 修改图表展示数据
           this.UPDATACHARTLIST(res.data.statistics)
+          // this.UPDATACHARTLISTPIE(res.data.statistics)
           this.UPDATACHARTDATAPARALLELAXISDATA(res)
 
           // 跳转组件
@@ -651,6 +708,8 @@ export default {
 
           this.CHARTDATA(data)
           this.UPDATACHARTLIST(res.data.statistics)
+          // this.UPDATACHARTLISTPIE(res.data.statistics)
+
           // 跳转组件
           this.onChangeComponent({ val: 1, title: '病人筛选结果' })
         } else {
@@ -768,6 +827,11 @@ export default {
     chartInit (option) {
       // 基于准备好的dom，初始化echarts实例
       setTimeout(() => {
+        const myChartDefault = this.$echarts.init(
+          document.getElementById('myChartDefault')
+        )
+        myChartDefault.setOption(option, true)
+
         const myChart = this.$echarts.init(document.getElementById('myChart'))
         myChart.setOption(option, true)
       }, 200)
