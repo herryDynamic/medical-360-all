@@ -34,9 +34,11 @@ const actions = {
             drawerType = 2
           }
           commit(TYPES.ONSHOWORCLOSEDRAWER, { drawer, type: drawerType })
+          const diseaseInfoModelData = res.data.diseaseInfoModel
+          // diseaseInfoModelData[1].children.splice(3, 1)
           localStorage.setItem(
             'diseaseInfoModel',
-            JSON.stringify(res.data.diseaseInfoModel)
+            JSON.stringify(diseaseInfoModelData)
           )
         }
       })

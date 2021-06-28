@@ -5,14 +5,14 @@
         <div class="clinical-top-wrap">
           <!-- 诊断分期：diseaseInfo.diseaseInfoModel[0].children[0] -->
           <span class="xjtitle-color">{{
-            diseaseInfo.diseaseInfoModel[0].children[0] &&
-              diseaseInfo.diseaseInfoModel[0].children[0].disease_info_title
+            diseaseInfo.diseaseInfoModel[0] &&
+              diseaseInfo.diseaseInfoModel[0].disease_info_title
           }}</span
           ><i
             class="el-icon-edit"
             @click="
               ONSHOWTOAST({
-                parentIndex: 0,
+                parentIndex: 1,
                 childIndex: 0,
                 isParent: false,
                 isSearch: false
@@ -23,7 +23,7 @@
         <div class="clinical-middle-wrap">
           <div
             v-for="(ns, index) in formatterChildren(
-              diseaseInfo.diseaseInfoModel[0].children[0].children,
+              diseaseInfo.diseaseInfoModel[0].children,
               1
             )"
             :key="index"
@@ -38,7 +38,7 @@
           </div>
           <div
             v-for="(ns, index) in formatterChildren(
-              diseaseInfo.diseaseInfoModel[0].children[0].children,
+              diseaseInfo.diseaseInfoModel[0].children,
               0
             )"
             :key="ns.id + index"
@@ -65,19 +65,19 @@
           </div>
         </div>
       </div>
-      <!-- 临床表现：diseaseInfo.diseaseInfoModel[0].disease_info_title，去掉第一个 -->
+      <!-- 临床表现：diseaseInfo.diseaseInfoModel[1].disease_info_title，去掉第一个 -->
       <div class="clinical-info-middle-wrap">
         <div class="clinical-top-wrap">
           <span class="xjtitle-color">{{
-            diseaseInfo.diseaseInfoModel[0] &&
-              diseaseInfo.diseaseInfoModel[0].disease_info_title
+            diseaseInfo.diseaseInfoModel[1] &&
+              diseaseInfo.diseaseInfoModel[1].disease_info_title
           }}</span
           ><i
             class="el-icon-edit"
             @click="
               ONSHOWTOAST({
-                parentIndex: 0,
-                childIndex: 0,
+                parentIndex: 1,
+                childIndex: 1,
                 isParent: false,
                 isSearch: false
               })
@@ -87,8 +87,8 @@
         <div class="clinical-m-middle-wrap">
           <div class="clinical-m-middle-l-wrap">
             <p
-              v-for="clinicalSsmtz in diseaseInfo.diseaseInfoModel[0]
-                .children[1].children"
+              v-for="clinicalSsmtz in diseaseInfo.diseaseInfoModel[1]
+                .children[0].children"
               :key="clinicalSsmtz.id"
             >
               <span class="TNM-label"
@@ -109,21 +109,21 @@
         </div>
         <div
           class="clinical-m-middle-wrap"
-          v-if="diseaseInfo.diseaseInfoModel[0].children[3]"
+          v-if="diseaseInfo.diseaseInfoModel[1].children[2]"
         >
           <div class="clinical-m-middle-tz-wrap">
             <p class="tx-label-wrap">
               <span class="TNM-label"
                 >{{
-                  diseaseInfo.diseaseInfoModel[0].children[3]
+                  diseaseInfo.diseaseInfoModel[1].children[2]
                     .disease_info_title
                 }}:</span
               >
             </p>
             <div class="tz-r-wrap">
               <template
-                v-for="(item, index) in diseaseInfo.diseaseInfoModel[0]
-                  .children[3].children"
+                v-for="(item, index) in diseaseInfo.diseaseInfoModel[1]
+                  .children[2].children"
               >
                 <p
                   :key="index"
@@ -141,15 +141,15 @@
             <p class="tx-label-wrap">
               <span class="TNM-label"
                 >{{
-                  diseaseInfo.diseaseInfoModel[0].children[2]
+                  diseaseInfo.diseaseInfoModel[1].children[1]
                     .disease_info_title
                 }}:</span
               >
             </p>
             <div class="tz-r-wrap">
               <template
-                v-for="(item, index) in diseaseInfo.diseaseInfoModel[0]
-                  .children[2].children"
+                v-for="(item, index) in diseaseInfo.diseaseInfoModel[1]
+                  .children[1].children"
               >
                 <p
                   v-if="item.disease_info_title_value === 'y'"
@@ -168,19 +168,19 @@
       <div class="l-i-top-wrap">
         <div
           class="clinical-m-middle-wrap laboratory-info-top-wrap laboratory-sys-wrap"
-          v-for="(child, index) in diseaseInfo.diseaseInfoModel[1].children"
+          v-for="(child, index) in diseaseInfo.diseaseInfoModel[2].children"
           :key="index"
         >
           <p class="clinical-title-wrap" v-if="index === 0">
             <span class="xjtitle-color">{{
-              diseaseInfo.diseaseInfoModel[1].disease_info_title
+              diseaseInfo.diseaseInfoModel[2].disease_info_title
             }}</span
             ><i
               class="el-icon-edit"
               @click="
                 ONSHOWTOAST({
-                  parentIndex: 1,
-                  childIndex: 1,
+                  parentIndex: 2,
+                  childIndex: 2,
                   isParent: false,
                   isSearch: false
                 })
@@ -237,18 +237,18 @@
     </div>
     <div
       class="info-wrap p-pathology-info-wrap"
-      v-if="diseaseInfo.diseaseInfoModel[2]"
+      v-if="diseaseInfo.diseaseInfoModel[3]"
     >
       <p class="clinical-title-wrap">
         <span class="xjtitle-color">{{
-          diseaseInfo.diseaseInfoModel[2].disease_info_title
+          diseaseInfo.diseaseInfoModel[3].disease_info_title
         }}</span
         ><i
           class="el-icon-edit"
           @click="
             ONSHOWTOAST({
-              parentIndex: 2,
-              childIndex: 2,
+              parentIndex: 3,
+              childIndex: 3,
               isParent: false,
               isSearch: false
             })
@@ -256,22 +256,22 @@
         ></i>
       </p>
       <!-- <div class="pathology-wrap">
-      <span class="TNM-label">是否{{diseaseInfo.diseaseInfoModel[2].children[0].disease_info_title}}</span><span class="TNM-label default-color">{{diseaseInfo.diseaseInfoModel[2].children[0].disease_info_title_value}}</span>
+      <span class="TNM-label">是否{{diseaseInfo.diseaseInfoModel[3].children[0].disease_info_title}}</span><span class="TNM-label default-color">{{diseaseInfo.diseaseInfoModel[3].children[0].disease_info_title_value}}</span>
     </div> -->
       <div class="pathology-wrap pathology-wrap-collumn">
         <!-- <span class="TNM-label">原位腺癌（AIS、BAC）</span> -->
         <div
           class="lung-wrap"
-          v-if="diseaseInfo.diseaseInfoModel[2].positionName"
+          v-if="diseaseInfo.diseaseInfoModel[3].positionName"
           :class="[
-            diseaseInfo.diseaseInfoModel[2].positionName
+            diseaseInfo.diseaseInfoModel[3].positionName
               .split(',')[0]
               .split('-')[0] + '-block'
           ]"
         >
           <div
             class="image-lung"
-            v-for="img in diseaseInfo.diseaseInfoModel[2].positionName
+            v-for="img in diseaseInfo.diseaseInfoModel[3].positionName
               .split(',')
               .filter(e => e)"
             :key="img"
@@ -280,7 +280,7 @@
         </div>
       </div>
       <div
-        v-for="(lung, index) in diseaseInfo.diseaseInfoModel[2].children"
+        v-for="(lung, index) in diseaseInfo.diseaseInfoModel[3].children"
         :key="index"
         class="pathology-wrap"
       >
@@ -297,18 +297,18 @@
     </div>
     <div
       class="info-wrap p-pathology-info-wrap"
-      v-if="!diseaseInfo.diseaseInfoModel[2]"
+      v-if="!diseaseInfo.diseaseInfoModel[3]"
     >
       <p class="clinical-title-wrap">
         <span class="xjtitle-color">{{
-          diseaseInfo.diseaseInfoModel[4].disease_info_title
+          diseaseInfo.diseaseInfoModel[5].disease_info_title
         }}</span
         ><i
           class="el-icon-edit"
           @click="
             ONSHOWTOAST({
-              parentIndex: 3,
-              childIndex: 4,
+              parentIndex: 4,
+              childIndex: 5,
               isParent: false,
               isSearch: false
             })
@@ -316,22 +316,22 @@
         ></i>
       </p>
       <!-- <div class="pathology-wrap">
-      <span class="TNM-label">是否{{diseaseInfo.diseaseInfoModel[4].children[0].disease_info_title}}</span><span class="TNM-label default-color">{{diseaseInfo.diseaseInfoModel[4].children[0].disease_info_title_value}}</span>
+      <span class="TNM-label">是否{{diseaseInfo.diseaseInfoModel[5].children[0].disease_info_title}}</span><span class="TNM-label default-color">{{diseaseInfo.diseaseInfoModel[5].children[0].disease_info_title_value}}</span>
     </div> -->
       <div class="pathology-wrap pathology-wrap-collumn">
         <!-- <span class="TNM-label">原位腺癌（AIS、BAC）</span> -->
         <div
           class="lung-wrap"
-          v-if="diseaseInfo.diseaseInfoModel[4].positionName"
+          v-if="diseaseInfo.diseaseInfoModel[5].positionName"
           :class="[
-            diseaseInfo.diseaseInfoModel[4].positionName
+            diseaseInfo.diseaseInfoModel[5].positionName
               .split(',')[0]
               .split('-')[0] + '-block'
           ]"
         >
           <div
             class="image-lung"
-            v-for="img in diseaseInfo.diseaseInfoModel[4].positionName
+            v-for="img in diseaseInfo.diseaseInfoModel[5].positionName
               .split(',')
               .filter(e => e)"
             :key="img"
@@ -340,7 +340,7 @@
         </div>
       </div>
       <div
-        v-for="(lung, index) in diseaseInfo.diseaseInfoModel[4].children"
+        v-for="(lung, index) in diseaseInfo.diseaseInfoModel[5].children"
         :key="index"
         class="pathology-wrap"
       >
@@ -369,19 +369,19 @@
         <div
           class="jwhistory-wrap"
           v-if="
-            diseaseInfo.diseaseInfoModel[4] && diseaseInfo.diseaseInfoModel[2]
+            diseaseInfo.diseaseInfoModel[5] && diseaseInfo.diseaseInfoModel[3]
           "
         >
           <div class="clinical-top-wrap">
             <span class="xjtitle-color">{{
-              diseaseInfo.diseaseInfoModel[4].disease_info_title
+              diseaseInfo.diseaseInfoModel[5].disease_info_title
             }}</span
             ><i
               class="el-icon-edit"
               @click="
                 ONSHOWTOAST({
-                  parentIndex: 3,
-                  childIndex: 4,
+                  parentIndex: 4,
+                  childIndex: 5,
                   isParent: false,
                   isSearch: false
                 })
@@ -391,13 +391,13 @@
           <div
             class="jwhistory-m-middle-wrap"
             v-if="
-              diseaseInfo.diseaseInfoModel[4].children[0]
+              diseaseInfo.diseaseInfoModel[5].children[0]
                 .disease_info_title_value
             "
           >
             <p
               v-for="(item,
-              index) in diseaseInfo.diseaseInfoModel[4].children[0].disease_info_title_value.split(
+              index) in diseaseInfo.diseaseInfoModel[5].children[0].disease_info_title_value.split(
                 ','
               )"
               :key="index"
@@ -417,14 +417,14 @@
             >
               <p class="clinical-title-wrap">
                 <span class="xjtitle-color">{{
-                  diseaseInfo.diseaseInfoModel[3].disease_info_title
+                  diseaseInfo.diseaseInfoModel[4].disease_info_title
                 }}</span
                 ><i
                   class="el-icon-edit"
                   @click="
                     ONSHOWTOAST({
-                      parentIndex: 2,
-                      childIndex: 3,
+                      parentIndex: 3,
+                      childIndex: 4,
                       isParent: false,
                       isSearch: false
                     })
@@ -434,7 +434,7 @@
               <div class="laboratory-sys-4-wrap">
                 <div
                   class="laboratory-sys-item-wrap"
-                  v-for="(child, index) in diseaseInfo.diseaseInfoModel[3]
+                  v-for="(child, index) in diseaseInfo.diseaseInfoModel[4]
                     .children"
                   :key="index"
                   :style="{ width: child.portion + '%' }"
@@ -498,10 +498,10 @@ export default {
   },
   mounted () {
     console.log(
-      this.diseaseInfo.diseaseInfoModel[2]?.positionName
+      this.diseaseInfo.diseaseInfoModel[3]?.positionName
         .split(',')[0]
         .split('-')[0] + '-block',
-      'diseaseInfo.diseaseInfoModel[2].positionName.split(',
+      'diseaseInfo.diseaseInfoModel[3].positionName.split(',
       ')[0].split(' - ')[0]+'
     )
   },
