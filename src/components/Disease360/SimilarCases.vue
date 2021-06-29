@@ -30,7 +30,7 @@
           <div class="doughnut-wrap shadow">
             <div class="doughnut-top-wrap">
               <p>
-                <span>共发现{{ total }}个相似病人</span>
+                <span>共发现{{ tableTotal }}个相似病人</span>
                 <!-- <span>共计3203(1.01%)</span> -->
               </p>
             </div>
@@ -728,6 +728,7 @@ export default {
       const dataGZ = this.chartData.dataGZ
       const dataSH = this.chartData.dataSH
       const dataParallelAxis = Object.assign(this.chartData.parallelAxis)
+      console.log(this.chartData, 'this.chartData2')
 
       console.log(dataBJ, 'dataBJ')
       const option = {
