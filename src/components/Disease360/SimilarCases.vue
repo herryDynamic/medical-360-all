@@ -194,11 +194,10 @@ import { Table, Form } from 'element-ui'
 import SearchChartTable from './SearchChartTable'
 import RetrievalForm from './RetrievalForm'
 import AISearchGroup from './AISearchGroup'
-import diease360 from '@/request/api/disease360'
+import disease360 from '@/request/api/disease360'
 import Bar from '../../components/Echarts/Bar.vue'
 // import api from '@/request/index'
 import { mapMutations, mapState } from 'vuex'
-import disease360 from '../../request/api/disease360'
 export default {
   components: {
     [Table.name]: Table,
@@ -217,6 +216,9 @@ export default {
     searchDialogForm: {
       type: Object
     }
+  },
+  destroyed () {
+    this.CLEARSEARCHFILTERS()
   },
   data () {
     return {
@@ -371,13 +373,14 @@ export default {
       UPDATACHARTLISTDEFAULT: 'disease360/UPDATACHARTLISTDEFAULT',
       CONDITIONLIST: 'disease360/CONDITIONLIST',
       UPDATACHARTDATAPARALLELAXISDATA:
-        'disease360/UPDATACHARTDATAPARALLELAXISDATA'
+        'disease360/UPDATACHARTDATAPARALLELAXISDATA',
+      CLEARSEARCHFILTERS: 'disease360/CLEARSEARCHFILTERS'
     }),
     conditionList () {
       const param = {
         disease_name: localStorage.getItem('disease_name')
       }
-      diease360.conditionList(param).then(res => {
+      disease360.conditionList(param).then(res => {
         if (!res.data) {
           return
         }
@@ -420,25 +423,20 @@ export default {
         pageIndex: this.pageIndex, // 页数
         pageSize: this.pageSize // 条数
       }
-      diease360
-        .similarityCase(param)
-        .then(res => {
-          this.tableTotal = res.total
-          this.tableData = res.data
-          // this.tableData = res.data.filter((item, i) => {
-          //   return parseInt(item.scop) >= 50
-          // })
-          this.UPDATACHARTLISTDEFAULT(res.statistics)
+      disease360.similarityCase(param).then(res => {
+        this.tableTotal = res.total
+        this.tableData = res.data
+        // this.tableData = res.data.filter((item, i) => {
+        //   return parseInt(item.scop) >= 50
+        // })
+        this.UPDATACHARTLISTDEFAULT(res.statistics)
 
-          this.tableData.forEach(element => {
-            if (element.scop) {
-              element.scop = element.scop + '%'
-            }
-          })
+        this.tableData.forEach(element => {
+          if (element.scop) {
+            element.scop = element.scop + '%'
+          }
         })
-        .catch(err => {
-          console.log()
-        })
+      })
     },
     /*
      * 根据数组对象属性删除对应项
@@ -463,7 +461,7 @@ export default {
     //   const data = {
     //     disease_name: localStorage.getItem('disease_name')
     //   }
-    //   diease360.getSimilarityEntity(data).then(res => {})
+    //   disease360.getSimilarityEntity(data).then(res => {})
     // },
     // 表格数据
     getSimilarityEntity () {
@@ -472,43 +470,38 @@ export default {
         num_hospital: localStorage.getItem('numHospital'),
         disease_name: localStorage.getItem('disease_name')
       }
-      diease360
-        .getSimilarityEntity(param)
-        .then(res => {
-          const headerData = res.data.filter((item, i) => {
-            return item.icon_top_is === '1'
-          })
-          // const headerData = res.data
-          console.log(headerData, 'headerData')
-          this.HeaderData = headerData.map(item => {
-            return {
-              label: item?.disease_info_title || '',
-              key: item?.disease_info_title || ''
-            }
-          })
-          this.HeaderData.unshift({
-            label: '患者ID',
-            key: '患者ID'
-          })
-          this.HeaderData.push({
-            label: '相似度',
-            key: 'scop'
-          })
-          // 赋值下拉框数据:取列表展示icon_top_is为1的值
-          let searchDataListSearchData = []
-          searchDataListSearchData = headerData.map((item, index) => {
-            return {
-              label: item?.disease_info_title || '',
-              value: index + '-' + item.id + '-' + item.disease_info_title,
-              publicInfoModel: item.publicInfoModel
-            }
-          })
-          // 修改图标连线数据title
-          this.UPDATACHARTTITLEDATA(searchDataListSearchData)
+      disease360.getSimilarityEntity(param).then(res => {
+        const headerData = res.data.filter((item, i) => {
+          return item.icon_top_is === '1'
         })
-        .catch(err => {
-          console.log()
+        // const headerData = res.data
+        console.log(headerData, 'headerData')
+        this.HeaderData = headerData.map(item => {
+          return {
+            label: item?.disease_info_title || '',
+            key: item?.disease_info_title || ''
+          }
         })
+        this.HeaderData.unshift({
+          label: '患者ID',
+          key: '患者ID'
+        })
+        this.HeaderData.push({
+          label: '相似度',
+          key: 'scop'
+        })
+        // 赋值下拉框数据:取列表展示icon_top_is为1的值
+        let searchDataListSearchData = []
+        searchDataListSearchData = headerData.map((item, index) => {
+          return {
+            label: item?.disease_info_title || '',
+            value: index + '-' + item.id + '-' + item.disease_info_title,
+            publicInfoModel: item.publicInfoModel
+          }
+        })
+        // 修改图标连线数据title
+        this.UPDATACHARTTITLEDATA(searchDataListSearchData)
+      })
     },
     // 图标展示下拉框和图标的数据
     getSimilarityEntityFlag () {
@@ -517,47 +510,42 @@ export default {
         num_hospital: localStorage.getItem('numHospital'),
         disease_name: localStorage.getItem('disease_name')
       }
-      diease360
-        .getSimilarityEntityFlag(param)
-        .then(res => {
-          console.log(res)
-          // // 取全部值
-          let searchDataListSearch = []
-          searchDataListSearch = res.data.map((item, index) => {
+      disease360.getSimilarityEntityFlag(param).then(res => {
+        console.log(res)
+        // // 取全部值
+        let searchDataListSearch = []
+        searchDataListSearch = res.data.map((item, index) => {
+          return {
+            ...item,
+            label: item?.disease_info_title || '',
+            value: index + '-' + item.id + '-' + item.disease_info_title,
+            publicInfoModel: item.publicInfoModel,
+            children: item.children
+          }
+        })
+        for (let i = 0; i < searchDataListSearch.length; i++) {
+          searchDataListSearch[i].children = searchDataListSearch[
+            i
+          ].children.map((item, index) => {
             return {
               ...item,
               label: item?.disease_info_title || '',
-              value: index + '-' + item.id + '-' + item.disease_info_title,
-              publicInfoModel: item.publicInfoModel,
-              children: item.children
+              value:
+                i +
+                '-' +
+                index +
+                '-' +
+                item.id +
+                '-' +
+                item.disease_info_title +
+                '-' +
+                item.presentation_type,
+              publicInfoModel: item.publicInfoModel
             }
           })
-          for (let i = 0; i < searchDataListSearch.length; i++) {
-            searchDataListSearch[i].children = searchDataListSearch[
-              i
-            ].children.map((item, index) => {
-              return {
-                ...item,
-                label: item?.disease_info_title || '',
-                value:
-                  i +
-                  '-' +
-                  index +
-                  '-' +
-                  item.id +
-                  '-' +
-                  item.disease_info_title +
-                  '-' +
-                  item.presentation_type,
-                publicInfoModel: item.publicInfoModel
-              }
-            })
-          }
-          this.SEARCHDATALIST(searchDataListSearch)
-        })
-        .catch(err => {
-          console.log()
-        })
+        }
+        this.SEARCHDATALIST(searchDataListSearch)
+      })
     },
     onShowToast (i) {
       this.$emit('onShowToast', i)
@@ -702,11 +690,14 @@ export default {
 
       // this.onChangeComponent({ val: 1, title: '病人筛选结果' })
     },
+    // AI检索返回方法
     onSubmitAI (val) {
       const data = {
         disease_name: localStorage.getItem('disease_name'),
         sign: this.conditionListData[val.selectitem.index].conditionsList
       }
+      this.UPDATAONADDChILDFILTERTitle() // 修改线条图的title
+
       disease360.similarityCaseSearh(data).then(res => {
         if (res.status === '0') {
           // 图表赋值
@@ -730,16 +721,14 @@ export default {
     onTabClick (tab, event) {
       this.activeName = tab.name
     },
-    // 更新线图
+    // 更新线图：制作数据
     initData () {
       const mcolors = ['rgba(0,0,0,0.1)', '#409EFF', 'rgb(141,176,243)']
-      const schema = this.chartData.schema
       const dataBJ = this.chartData.dataBJ
       const dataGZ = this.chartData.dataGZ
       const dataSH = this.chartData.dataSH
       const dataParallelAxis = Object.assign(this.chartData.parallelAxis)
       console.log(this.chartData, 'this.chartData2')
-
       console.log(dataBJ, 'dataBJ')
       const option = {
         parallelAxis: dataParallelAxis,
@@ -835,6 +824,7 @@ export default {
       }
       this.chartInit(option)
     },
+    // 更新具体的线图
     chartInit (option) {
       // 基于准备好的dom，初始化echarts实例
       setTimeout(() => {
@@ -847,6 +837,7 @@ export default {
         myChart.setOption(option, true)
       }, 200)
     },
+    // 暂未用到
     chartPieInit (chart, index) {
       var myChart = this.$echarts.init(
         document.getElementById(`doughnutChart${index}`)

@@ -168,7 +168,7 @@ export default {
         ],
         series: [
           {
-            name: this.nameY,
+            name: this.nameY, // 鼠标放上去显示的内容：title:datay[i]
             type: 'bar',
             barMaxWidth: 30,
             barGap: '100%' /* 多个并排柱子设置柱子之间的间距 */,

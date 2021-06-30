@@ -5,6 +5,21 @@ import { zoom } from '@/utils/animate'
 import currentScience from '@/config'
 let preType
 const mutations = {
+  [TYPES.CLEARSEARCHFILTERS] (state, data) {
+    state.searchFilters = [
+      {
+        relation: '',
+        theme: '',
+        condition: '',
+        range: '',
+        children: [],
+        presentation_type: null,
+        label: null,
+        value: null,
+        publicInfoModel: null
+      }
+    ]
+  },
   [TYPES.UPDATAONADDChILDFILTER] (state, v) {
     var searchFiltersLengthNumList = 0
     for (let i = 0; i < state.searchFilters.length; i++) {
