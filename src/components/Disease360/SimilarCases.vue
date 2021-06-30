@@ -2,6 +2,7 @@
   <div class="similar-case-wrap">
     <el-tabs v-model="activeName" @tab-click="onTabClick">
       <el-tab-pane label="相似病例" name="list">
+        <!-- 相似病例表格 -->
         <div class="chart-wrap list-wrap shadow">
           <SearchChartTable
             :tableData="tableData"
@@ -9,6 +10,7 @@
             @onDetail="onDetail"
           ></SearchChartTable>
         </div>
+        <!-- 相似病例分页 -->
         <div class="pagination-wrap">
           <el-pagination
             background
@@ -19,6 +21,7 @@
           >
           </el-pagination>
         </div>
+        <!-- 相似病例图 -->
         <div class="chart-wrap chart-wrap-content shadow">
           <!-- 曲线图 -->
           <div
@@ -60,9 +63,14 @@
       </el-tab-pane>
       <el-tab-pane label="自定义搜索" name="chart">
         <div class="chart-wrap chart-wrap-content shadow">
+          <!-- 自定义搜索高级搜索按钮 -->
           <div class="search-wrap">
             <span>{{ changeTitle }}</span>
             <div>
+              <i
+                @click="onChangeComponent({ val: 1, title: '病人筛选结果' })"
+                class="lineChart-icon"
+              ></i>
               <i
                 @click="onChangeComponent({ val: 2, title: '相似病例搜索' })"
                 class="ld-icon"
@@ -93,7 +101,7 @@
               :presentation_type="presentation_type"
             ></RetrievalForm>
           </div>
-          <!-- ai检索 -->
+          <!-- 检索 -->
           <div v-show="isShowEchart === 3" class="form-wrap">
             <AISearchGroup
               @onSubmitAI="onSubmitAI"
@@ -201,16 +209,18 @@ export default {
     Bar
   },
   props: {
+    // 全部图表width参数
     screenWidth: {
       type: Number
     },
+    // 当前无用
     searchDialogForm: {
       type: Object
     }
   },
   data () {
     return {
-      department: localStorage.getItem('department'),
+      department: localStorage.getItem('department'), // 获取当前的科室名字：全科、膀胱癌
       groups: [],
       treatmentDataX: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月'],
       treatmentDataY: [30, 10],
@@ -1020,6 +1030,10 @@ $font-clor: rgb(30, 38, 50);
     }
     .ai-icon {
       background: url('../../static/images/AI.png') no-repeat;
+      background-size: contain;
+    }
+    .lineChart-icon {
+      background: url('../../static/images/line-chart.png') no-repeat;
       background-size: contain;
     }
   }

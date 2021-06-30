@@ -26,7 +26,7 @@
             <div style="min-width:100px">
               <el-select
                 v-model="fliter.relation"
-                placeholder="或者"
+                placeholder="或"
                 style="width:90px"
                 size="small"
                 v-if="index"

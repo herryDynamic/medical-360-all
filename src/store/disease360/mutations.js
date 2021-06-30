@@ -62,7 +62,7 @@ const mutations = {
   // 添加一条数据事件
   [TYPES.ONADDFLITER] (state) {
     const obj = {
-      relation: '',
+      relation: 'or', // 默认为或
       theme: '',
       condition: '',
       range: '',
