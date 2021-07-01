@@ -54,6 +54,7 @@
                   titleLocal="left"
                   :dataX="chart.treatmentDataX"
                   :dataY="chart.treatmentDataY"
+                  :totalList="chart.totalList"
                   :direction="direction"
                 />
               </div>
@@ -149,6 +150,7 @@
                   titleLocal="left"
                   :dataX="chart.treatmentDataX"
                   :dataY="chart.treatmentDataY"
+                  :totalList="chart.totalList"
                   :direction="direction"
                 />
               </div>

@@ -20,13 +20,17 @@ export default {
     },
     nameY: {
       type: String,
-      default: '百分比'
+      default: '人次'
     },
     dataX: {
       type: Array,
       default: null
     },
     dataY: {
+      type: Array,
+      default: null
+    },
+    totalList: {
       type: Array,
       default: null
     },
@@ -64,6 +68,7 @@ export default {
   mounted () {
     console.log(this.dataX, this.dataY, 'dataxanddatay')
     this.initChart()
+    console.log(this.totalList, 'this.totalList')
   },
   beforeDestroy () {
     if (!this.chart) {
@@ -95,7 +100,12 @@ export default {
           trigger: 'axis',
           axisPointer: {
             // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            type: '' // 默认为直线，可选为：'line' | 'shadow'
+          },
+          formatter: function (params, ticket, callback) {
+            return (
+              '<br />' + params[0].axisValue + '：' + params[0].value + '人'
+            )
           }
         },
         legend: {
@@ -163,7 +173,8 @@ export default {
               color: '#999999'
             },
             name: this.nameY,
-            data: this.dataY
+            data: this.dataY,
+            minInterval: 1 // 不显示小数
           }
         ],
         series: [
@@ -172,7 +183,7 @@ export default {
             type: 'bar',
             barMaxWidth: 30,
             barGap: '100%' /* 多个并排柱子设置柱子之间的间距 */,
-            data: this.direction ? this.dataX : this.dataY,
+            data: this.direction ? this.dataX : this.totalList,
             // 移入当前的柱状图时改变颜色
             itemStyle: {
               emphasis: {

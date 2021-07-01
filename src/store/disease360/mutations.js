@@ -126,7 +126,8 @@ const mutations = {
       dataTest.push({
         title: Object.keys(data)[i],
         treatmentDataX: [],
-        treatmentDataY: []
+        treatmentDataY: [],
+        totalList: []
       })
 
       const keydata = Object.keys(data)[i] // 当前data对象中的某个对象名
@@ -137,6 +138,9 @@ const mutations = {
       // })
       dataTest[i].treatmentDataX = data[keydata].map((item, index) => {
         return item.title
+      })
+      dataTest[i].totalList = data[keydata].map((item, index) => {
+        return item.total
       })
       // 只要前十个，解决相隔无字
       dataTest[i].treatmentDataX = dataTest[i].treatmentDataX.splice(0, 10)
@@ -150,7 +154,7 @@ const mutations = {
     // })
     // state.chartList = dataValue
 
-    state.chartList = dataTest
+    state.chartList = dataTest // 更新高级检索
   },
   [TYPES.UPDATACHARTLISTDEFAULT] (state, data) {
     const dataTest = []
@@ -159,7 +163,8 @@ const mutations = {
       dataTest.push({
         title: Object.keys(data)[i],
         treatmentDataX: [],
-        treatmentDataY: []
+        treatmentDataY: [],
+        totalList: []
       })
 
       const keydata = Object.keys(data)[i] // 当前data对象中的某个对象名
@@ -170,6 +175,9 @@ const mutations = {
       // })
       dataTest[i].treatmentDataX = data[keydata].map((item, index) => {
         return item.title
+      })
+      dataTest[i].totalList = data[keydata].map((item, index) => {
+        return item.total
       })
       // 只要前十个，解决相隔无字
       dataTest[i].treatmentDataX = dataTest[i].treatmentDataX.splice(0, 10)
@@ -183,8 +191,8 @@ const mutations = {
     // })
     // state.chartList = dataValue
 
-    state.chartListDefault = dataTest
-    state.chartList = dataTest
+    state.chartListDefault = dataTest // 初始化更新相似病例
+    state.chartList = dataTest // 初始化更新高级检索
   },
   [TYPES.UPDATAONADDChILDFILTERTitle] (state, data) {
     const updatDataList = JSON.parse(JSON.stringify(state.searchFilters))
