@@ -1,4 +1,5 @@
 const state = {
+  // 高级搜索数组
   searchFilters: [
     {
       relation: '',
@@ -16,7 +17,7 @@ const state = {
     theme: ''
   },
   searchDataList: [], // 搜索主题的搜索项数据
-  searchDataIndex: null,
+  searchDataIndex: null, // 高级搜索弹出框选择后进行赋值
   activeName: '0',
   editForm: {},
   formItems: [],

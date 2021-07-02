@@ -309,8 +309,9 @@ export default {
     // this.chartListPie.forEach((chart, index) => {
     //   this.chartPieInit(chart, index)
     // })
-    this.similarityCase()
     this.getSimilarityEntity()
+
+    this.similarityCase()
     this.getSimilarityEntityFlag()
     this.conditionList()
   },
@@ -376,7 +377,8 @@ export default {
       CONDITIONLIST: 'disease360/CONDITIONLIST',
       UPDATACHARTDATAPARALLELAXISDATA:
         'disease360/UPDATACHARTDATAPARALLELAXISDATA',
-      CLEARSEARCHFILTERS: 'disease360/CLEARSEARCHFILTERS'
+      CLEARSEARCHFILTERS: 'disease360/CLEARSEARCHFILTERS',
+      UPDATACHARTTITLEDATANEXT: 'disease360/UPDATACHARTTITLEDATANEXT'
     }),
     conditionList () {
       const param = {
@@ -417,7 +419,7 @@ export default {
       console.log(val)
       this.similarityCase()
     },
-    similarityCase () {
+    async similarityCase () {
       const param = {
         patient_id: localStorage.getItem('patientId'),
         num_hospital: localStorage.getItem('numHospital'),
@@ -425,13 +427,21 @@ export default {
         pageIndex: this.pageIndex, // 页数
         pageSize: this.pageSize // 条数
       }
-      disease360.similarityCase(param).then(res => {
+      await disease360.similarityCase(param).then(res => {
+        sessionStorage.setItem('similarityCase', 'similarityCase')
         this.tableTotal = res.total
         this.tableData = res.data
         // this.tableData = res.data.filter((item, i) => {
         //   return parseInt(item.scop) >= 50
         // })
-        this.UPDATACHARTLISTDEFAULT(res.statistics)
+        const data = {
+          header: [],
+          data: res.data
+        }
+        this.CHARTDATA(data) // 修改线形图数据dataBJ
+        this.UPDATACHARTLISTDEFAULT(res.statistics) // 修改柱状图
+        this.UPDATACHARTDATAPARALLELAXISDATA(res.data)
+        this.UPDATACHARTTITLEDATANEXT()
 
         this.tableData.forEach(element => {
           if (element.scop) {
@@ -466,13 +476,13 @@ export default {
     //   disease360.getSimilarityEntity(data).then(res => {})
     // },
     // 表格数据
-    getSimilarityEntity () {
+    async getSimilarityEntity () {
       const param = {
         patient_id: localStorage.getItem('patientId'),
         num_hospital: localStorage.getItem('numHospital'),
         disease_name: localStorage.getItem('disease_name')
       }
-      disease360.getSimilarityEntity(param).then(res => {
+      await disease360.getSimilarityEntity(param).then(res => {
         const headerData = res.data.filter((item, i) => {
           return item.icon_top_is === '1'
         })
@@ -656,6 +666,7 @@ export default {
           }
         })
       }
+      sessionStorage.setItem('similarityCase', 'similarityCaseSearh')
 
       data.sign = dataTable
       this.UPDATAONADDChILDFILTERTitle() // 修改线条图的title
@@ -678,10 +689,10 @@ export default {
           // 去掉scop属性
           // this.removeByValue(this.HeaderData, 'key', 'scop')
 
-          this.CHARTDATA(data) // 修改图表展示数据
-          this.UPDATACHARTLIST(res.data.statistics)
+          this.CHARTDATA(data) // 修改线性图表展示数据：dataJB
+          this.UPDATACHARTLIST(res.data.statistics) // 修改柱状图数据
           // this.UPDATACHARTLISTPIE(res.data.statistics)
-          this.UPDATACHARTDATAPARALLELAXISDATA(res)
+          this.UPDATACHARTDATAPARALLELAXISDATA(res.data.list)
 
           // 跳转组件
           this.onChangeComponent({ val: 1, title: '病人筛选结果' })
@@ -698,6 +709,8 @@ export default {
         disease_name: localStorage.getItem('disease_name'),
         sign: this.conditionListData[val.selectitem.index].conditionsList
       }
+      sessionStorage.setItem('similarityCase', 'similarityCaseSearh')
+
       this.UPDATAONADDChILDFILTERTitle() // 修改线条图的title
 
       disease360.similarityCaseSearh(data).then(res => {
@@ -712,6 +725,7 @@ export default {
           this.CHARTDATA(data)
           this.UPDATACHARTLIST(res.data.statistics)
           // this.UPDATACHARTLISTPIE(res.data.statistics)
+          this.UPDATACHARTDATAPARALLELAXISDATA(res.data.list)
 
           // 跳转组件
           this.onChangeComponent({ val: 1, title: '病人筛选结果' })
@@ -725,6 +739,8 @@ export default {
     },
     // 更新线图：制作数据
     initData () {
+      // this.UPDATACHARTTITLEDATANEXT()
+
       const mcolors = ['rgba(0,0,0,0.1)', '#409EFF', 'rgb(141,176,243)']
       const dataBJ = this.chartData.dataBJ
       const dataGZ = this.chartData.dataGZ
@@ -830,13 +846,20 @@ export default {
     chartInit (option) {
       // 基于准备好的dom，初始化echarts实例
       setTimeout(() => {
-        const myChartDefault = this.$echarts.init(
-          document.getElementById('myChartDefault')
-        )
-        myChartDefault.setOption(option, true)
+        // 获取存储的值，如果是初始化更新的时候为similarityCase两边都更新，如果是similarityCaseSearch则只更新高级检索那的
+        const d = sessionStorage.getItem('similarityCase')
+        if (d === 'similarityCase') {
+          const myChartDefault = this.$echarts.init(
+            document.getElementById('myChartDefault')
+          )
+          myChartDefault.setOption(option, true)
 
-        const myChart = this.$echarts.init(document.getElementById('myChart'))
-        myChart.setOption(option, true)
+          const myChart = this.$echarts.init(document.getElementById('myChart'))
+          myChart.setOption(option, true)
+        } else {
+          const myChart = this.$echarts.init(document.getElementById('myChart'))
+          myChart.setOption(option, true)
+        }
       }, 200)
     },
     // 暂未用到

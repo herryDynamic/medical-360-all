@@ -5,6 +5,8 @@ import { zoom } from '@/utils/animate'
 import currentScience from '@/config'
 let preType
 const mutations = {
+  /** ********************************高级搜索值增删改查*************** */
+  // 清除高级搜索列表
   [TYPES.CLEARSEARCHFILTERS] (state, data) {
     state.searchFilters = [
       {
@@ -20,6 +22,7 @@ const mutations = {
       }
     ]
   },
+  // 相似病例：高级搜索赋值，当高级搜索第一列选择条件后
   [TYPES.UPDATAONADDChILDFILTER] (state, v) {
     var searchFiltersLengthNumList = 0
     for (let i = 0; i < state.searchFilters.length; i++) {
@@ -57,7 +60,7 @@ const mutations = {
       ].publicInfoModel = item.publicInfoModel
     }
   },
-  // 添加children事件
+  // 相似病例高级搜索第一列：添加children事件
   [TYPES.ONADDChILDFILTER] (state, v) {
     const obj = {
       theme: '',
@@ -94,12 +97,19 @@ const mutations = {
   [TYPES.ONDELFLITER] (state, index) {
     state.searchFilters.splice(index, 1)
   },
+  // 搜索主题的搜索项数据 修改
   [TYPES.SEARCHDATALIST] (state, data) {
     state.searchDataList = Object.assign(data)
   },
+  // 高级搜索弹出框选择后进行赋值
   [TYPES.SEARCHDATAINDEX] (state, data) {
     state.searchDataIndex = data
   },
+  /** ********************************高级搜索：值增删改查*************** */
+
+  /** *******************************echarts饼形图、柱状图修改：*************** */
+
+  // 修改饼形图数据：暂未用到
   [TYPES.UPDATACHARTLISTPIE] (state, data) {
     const dataTest = []
     for (let i = 0; i < Object.keys(data).length; i++) {
@@ -118,7 +128,7 @@ const mutations = {
     console.log(dataTest)
     state.chartList = dataTest
   },
-  // 修改柱状图数据
+  // 高级搜索修改柱状图数据
   [TYPES.UPDATACHARTLIST] (state, data) {
     const dataTest = []
 
@@ -131,11 +141,6 @@ const mutations = {
       })
 
       const keydata = Object.keys(data)[i] // 当前data对象中的某个对象名
-      // dataTest[i].treatmentDataX =  Object.keys(data[keydata])
-      // dataTest[i].treatmentDataY = Object.values(data[keydata])
-      // dataTest[i].treatmentDataY = dataTest[i].treatmentDataY.map(item => {
-      //   return item.toFixed(2)
-      // })
       dataTest[i].treatmentDataX = data[keydata].map((item, index) => {
         return item.title
       })
@@ -154,8 +159,9 @@ const mutations = {
     // })
     // state.chartList = dataValue
 
-    state.chartList = dataTest // 更新高级检索
+    state.chartList = dataTest // 更新高级检索的柱状图
   },
+  // 初始化更新柱状图
   [TYPES.UPDATACHARTLISTDEFAULT] (state, data) {
     const dataTest = []
 
@@ -191,9 +197,66 @@ const mutations = {
     // })
     // state.chartList = dataValue
 
-    state.chartListDefault = dataTest // 初始化更新相似病例
-    state.chartList = dataTest // 初始化更新高级检索
+    state.chartListDefault = dataTest // 初始化更新相似病例的柱状图数据
+    state.chartList = dataTest // 初始化更新高级检索的柱状图数据
   },
+  // 线形图:高级搜索后修改title和属性
+  [TYPES.UPDATACHARTTITLEDATA] (state, data) {
+    const header = data.map((item, index) => {
+      return {
+        name: item.label,
+        index: String(index),
+        title: item.label
+      }
+    })
+    // 初始化赋值
+    state.chartData.schema = JSON.parse(JSON.stringify(header))
+    state.chartData.parallelAxis = JSON.parse(JSON.stringify([]))
+    for (let i = 0; i < data.length; i++) {
+      state.chartData.parallelAxis.push({
+        dim: String(i),
+        name: data[i].label,
+        type: 'category',
+        data: [],
+        numType: 0
+      })
+      if (data[i].publicInfoModel) {
+        for (let j = 0; j < data[i].publicInfoModel.length; j++) {
+          state.chartData.parallelAxis[i].data.push(
+            data[i].publicInfoModel[j].public_info_title
+          )
+        }
+        console.log('111111')
+      }
+      if (data[i].publicInfoModel.length <= 0) {
+        console.log(state.chartData.dataBJ, 'state.chartData.dataBJ')
+        state.chartData.parallelAxis[i].numType = 1
+      }
+    }
+  },
+  // 线形图:初始化后添加title下的无值的属性
+  [TYPES.UPDATACHARTTITLEDATANEXT] (state, data) {
+    for (let i = 0; i < state.chartData.parallelAxis.length; i++) {
+      const r = []
+      for (let j = 0; j < state.chartData.dataBJ.length; j++) {
+        r.push(state.chartData.dataBJ[j][i])
+      }
+      console.log(r, 'r')
+
+      if (state.chartData.parallelAxis[i].numType === 1) {
+        state.chartData.parallelAxis[i].data = r.filter(function (
+          element,
+          index,
+          self
+        ) {
+          return self.indexOf(element) === index
+        })
+        state.chartData.parallelAxis[i].numType = 0
+      }
+    }
+  },
+
+  // 线条图:：高级检索后修改title及属性
   [TYPES.UPDATAONADDChILDFILTERTitle] (state, data) {
     const updatDataList = JSON.parse(JSON.stringify(state.searchFilters))
     for (let i = 0; i < state.searchFilters.length; i++) {
@@ -249,6 +312,7 @@ const mutations = {
     }
     console.log(state.chartData, 'state.chartData')
   },
+  // 线条图:：高级检索后添加title下的无值的data属性
   [TYPES.UPDATACHARTDATAPARALLELAXISDATA] (state, res) {
     for (
       let index = 0;
@@ -257,16 +321,17 @@ const mutations = {
     ) {
       const data2 = state.chartData.schemaNameTemporary[index].value
       const dataIndex = state.chartData.schemaNameTemporary[index].index
-      const tempalData = res.data.list.map(item => {
+      const tempalData = res.map(item => {
         return item[data2]
       })
-
+      // 数组去重
       const r = tempalData.filter(function (element, index, self) {
         return self.indexOf(element) === index
       })
 
       if (state.chartData.parallelAxis[dataIndex].numType === 1) {
         state.chartData.parallelAxis[dataIndex].data = r
+        state.chartData.parallelAxis[dataIndex].numType = 0
       }
     }
     console.log(state.chartData.parallelAxis, 'parallelAxis')
@@ -274,7 +339,7 @@ const mutations = {
   [TYPES.CONDITIONLIST] (state, data) {
     state.conditionList = data
   },
-  // 修改图表展示数据
+  // 线性图：修改展示数据
   [TYPES.CHARTDATA] (state, data) {
     const headerData = []
     for (let i = 0; i < data.data.length; i++) {
@@ -287,31 +352,9 @@ const mutations = {
     }
     state.chartData.dataBJ = JSON.parse(JSON.stringify(headerData))
   },
-  [TYPES.UPDATACHARTTITLEDATA] (state, data) {
-    const header = data.map((item, index) => {
-      return {
-        name: item.label,
-        index: String(index),
-        title: item.label
-      }
-    })
-    // 初始化赋值
-    state.chartData.schema = JSON.parse(JSON.stringify(header))
-    state.chartData.parallelAxis = JSON.parse(JSON.stringify([]))
-    for (let i = 0; i < data.length; i++) {
-      state.chartData.parallelAxis.push({
-        dim: String(i),
-        name: data[i].label,
-        type: 'category',
-        data: []
-      })
-      for (let j = 0; j < data[i].publicInfoModel.length; j++) {
-        state.chartData.parallelAxis[i].data.push(
-          data[i].publicInfoModel[j].public_info_title
-        )
-      }
-    }
-  },
+
+  /** *******************************echarts饼形图、柱状图修改：*************** */
+
   [TYPES.SETDISEASEINFOSELECTDATA] (state, v) {
     console.log(v)
     state.diseaseInfoSelectData = v

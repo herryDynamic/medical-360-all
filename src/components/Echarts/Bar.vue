@@ -66,9 +66,7 @@ export default {
     }
   },
   mounted () {
-    console.log(this.dataX, this.dataY, 'dataxanddatay')
     this.initChart()
-    console.log(this.totalList, 'this.totalList')
   },
   beforeDestroy () {
     if (!this.chart) {
