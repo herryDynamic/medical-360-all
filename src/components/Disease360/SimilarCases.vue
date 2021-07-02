@@ -430,6 +430,7 @@ export default {
       await disease360.similarityCase(param).then(res => {
         sessionStorage.setItem('similarityCase', 'similarityCase')
         this.tableTotal = res.total
+        this.total = res.total
         this.tableData = res.data
         // this.tableData = res.data.filter((item, i) => {
         //   return parseInt(item.scop) >= 50
@@ -439,9 +440,13 @@ export default {
           data: res.data
         }
         this.CHARTDATA(data) // 修改线形图数据dataBJ
+        // let statistics = {}
+        // for (let i = 0; i < res.statistics.keys.length; i++) {
+        //   res.statistics.values[i]=
+        // }
         this.UPDATACHARTLISTDEFAULT(res.statistics) // 修改柱状图
-        this.UPDATACHARTDATAPARALLELAXISDATA(res.data)
-        this.UPDATACHARTTITLEDATANEXT()
+        this.UPDATACHARTDATAPARALLELAXISDATA(res.data) // 添加title下的无值的data属性
+        this.UPDATACHARTTITLEDATANEXT() // 添加title下的无值的属性（第二遍data,方便初始化时候使用）
 
         this.tableData.forEach(element => {
           if (element.scop) {
@@ -449,6 +454,13 @@ export default {
           }
         })
       })
+    },
+    compare (property) {
+      return function (obj1, obj2) {
+        const value1 = obj1[property]
+        const value2 = obj2[property]
+        return value2 - value1 // 降序
+      }
     },
     /*
      * 根据数组对象属性删除对应项
@@ -712,7 +724,8 @@ export default {
       }
       sessionStorage.setItem('similarityCase', 'similarityCaseSearh')
 
-      this.UPDATAONADDChILDFILTERTitle() // 修改线条图的title
+      // this.UPDATAONADDChILDFILTERTitle() // 修改线条图的title
+      this.getSimilarityEntity()
 
       disease360.similarityCaseSearh(data).then(res => {
         if (res.status === '0') {
@@ -724,9 +737,10 @@ export default {
           this.total = res.data.total
 
           this.CHARTDATA(data)
-          this.UPDATACHARTLIST(res.data.statistics)
+          this.UPDATACHARTLIST(res.data.statistics) // 修改柱状图
           // this.UPDATACHARTLISTPIE(res.data.statistics)
-          this.UPDATACHARTDATAPARALLELAXISDATA(res.data.list)
+          // this.UPDATACHARTDATAPARALLELAXISDATA(res.data.list) // 添加title下的无值的data属性
+          this.UPDATACHARTTITLEDATANEXT(res.data.list)
 
           // 跳转组件
           this.onChangeComponent({ val: 1, title: '病人筛选结果' })

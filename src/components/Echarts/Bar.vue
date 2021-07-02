@@ -20,7 +20,7 @@ export default {
     },
     nameY: {
       type: String,
-      default: '人次'
+      default: '人'
     },
     dataX: {
       type: Array,
@@ -101,9 +101,7 @@ export default {
             type: '' // 默认为直线，可选为：'line' | 'shadow'
           },
           formatter: function (params, ticket, callback) {
-            return (
-              '<br />' + params[0].axisValue + '：' + params[0].value + '人'
-            )
+            return params[0].axisValue + '：' + params[0].value + '人'
           }
         },
         legend: {

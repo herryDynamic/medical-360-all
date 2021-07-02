@@ -5,7 +5,7 @@ import { zoom } from '@/utils/animate'
 import currentScience from '@/config'
 let preType
 const mutations = {
-  /** ********************************高级搜索值增删改查*************** */
+  /** ********************************高级搜索值增删改查：START*************** */
   // 清除高级搜索列表
   [TYPES.CLEARSEARCHFILTERS] (state, data) {
     state.searchFilters = [
@@ -105,9 +105,9 @@ const mutations = {
   [TYPES.SEARCHDATAINDEX] (state, data) {
     state.searchDataIndex = data
   },
-  /** ********************************高级搜索：值增删改查*************** */
+  /** ********************************高级搜索：值增删改查：END*************** */
 
-  /** *******************************echarts饼形图、柱状图修改：*************** */
+  /** *******************************echarts饼形图、柱状图修改：START*************** */
 
   // 修改饼形图数据：暂未用到
   [TYPES.UPDATACHARTLISTPIE] (state, data) {
@@ -200,7 +200,7 @@ const mutations = {
     state.chartListDefault = dataTest // 初始化更新相似病例的柱状图数据
     state.chartList = dataTest // 初始化更新高级检索的柱状图数据
   },
-  // 线形图:高级搜索后修改title和属性
+  // 线形图:初始化Title后：修改title和属性
   [TYPES.UPDATACHARTTITLEDATA] (state, data) {
     const header = data.map((item, index) => {
       return {
@@ -234,7 +234,7 @@ const mutations = {
       }
     }
   },
-  // 线形图:初始化后添加title下的无值的属性
+  // 线形图:初始化数据后：添加title下的无值的属性
   [TYPES.UPDATACHARTTITLEDATANEXT] (state, data) {
     for (let i = 0; i < state.chartData.parallelAxis.length; i++) {
       const r = []
@@ -256,7 +256,7 @@ const mutations = {
     }
   },
 
-  // 线条图:：高级检索后修改title及属性
+  // 线条图: 高级检索和AI后：修改title及属性
   [TYPES.UPDATAONADDChILDFILTERTitle] (state, data) {
     const updatDataList = JSON.parse(JSON.stringify(state.searchFilters))
     for (let i = 0; i < state.searchFilters.length; i++) {
@@ -312,7 +312,7 @@ const mutations = {
     }
     console.log(state.chartData, 'state.chartData')
   },
-  // 线条图:：高级检索后添加title下的无值的data属性
+  // 线条图:：初始化和高级检索和AI和后：添加title下的无值的data属性
   [TYPES.UPDATACHARTDATAPARALLELAXISDATA] (state, res) {
     for (
       let index = 0;
@@ -339,7 +339,7 @@ const mutations = {
   [TYPES.CONDITIONLIST] (state, data) {
     state.conditionList = data
   },
-  // 线性图：修改展示数据
+  // 线性图：初始化和高级搜索和AI后：修改展示数据
   [TYPES.CHARTDATA] (state, data) {
     const headerData = []
     for (let i = 0; i < data.data.length; i++) {
@@ -353,7 +353,7 @@ const mutations = {
     state.chartData.dataBJ = JSON.parse(JSON.stringify(headerData))
   },
 
-  /** *******************************echarts饼形图、柱状图修改：*************** */
+  /** *******************************echarts饼形图、柱状图修改：END*************** */
 
   [TYPES.SETDISEASEINFOSELECTDATA] (state, v) {
     console.log(v)
