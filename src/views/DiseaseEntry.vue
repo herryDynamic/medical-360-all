@@ -74,6 +74,13 @@ export default {
     ...mapMutations({ SEARCHCARDLIST: 'diseaseEntry/SEARCHCARDLIST' }),
     goToDetail (item) {
       if (!item.url) return
+
+      const u = item.url.slice(0, 4)
+      if (u === 'http') {
+        window.open(item.url)
+        return
+      }
+      console.log(item.url.slice(0, 4), 'http')
       localStorage.setItem('userName', `${item.department} / ${item.tools} `)
       localStorage.setItem('disease_name', item.disease_name)
       localStorage.setItem('department', item.department)

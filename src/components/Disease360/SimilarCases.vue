@@ -586,6 +586,7 @@ export default {
       //   query: { disease_name: localStorage.getItem('disease_name') }
       // })
 
+      // 新页面打开
       const routeUrl = this.$router.resolve({
         path: 'DiseaseDetail360',
         query: { disease_name: localStorage.getItem('disease_name') }
