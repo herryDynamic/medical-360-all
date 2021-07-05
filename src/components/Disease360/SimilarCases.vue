@@ -69,6 +69,7 @@
             <span>{{ changeTitle }}</span>
             <div>
               <i
+                v-if="changeTitle != '病人筛选结果'"
                 @click="onChangeComponent({ val: 1, title: '病人筛选结果' })"
                 class="lineChart-icon"
               ></i>
@@ -568,6 +569,10 @@ export default {
             }
           })
         }
+        // 过滤掉高级搜索的第一个选择数据的内容为空的
+        searchDataListSearch = searchDataListSearch.filter(item => {
+          return item.children.length > 0
+        })
         this.SEARCHDATALIST(searchDataListSearch)
       })
     },

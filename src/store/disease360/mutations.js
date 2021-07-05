@@ -234,7 +234,7 @@ const mutations = {
       }
     }
   },
-  // 线形图:初始化数据后：添加title下的无值的属性
+  // 线形图:初始化和AI数据后：添加title下的无值的属性
   [TYPES.UPDATACHARTTITLEDATANEXT] (state, data) {
     for (let i = 0; i < state.chartData.parallelAxis.length; i++) {
       const r = []
@@ -256,7 +256,7 @@ const mutations = {
     }
   },
 
-  // 线条图: 高级检索和AI后：修改title及属性
+  // 线条图: 高级检索后：修改title及属性
   [TYPES.UPDATAONADDChILDFILTERTitle] (state, data) {
     const updatDataList = JSON.parse(JSON.stringify(state.searchFilters))
     for (let i = 0; i < state.searchFilters.length; i++) {

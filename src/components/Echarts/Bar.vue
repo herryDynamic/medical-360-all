@@ -183,7 +183,7 @@ export default {
             // 移入当前的柱状图时改变颜色
             itemStyle: {
               emphasis: {
-                color: '#5dafd1'
+                color: '#0874F7'
               }
             }
             // markPoint: {
