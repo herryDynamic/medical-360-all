@@ -234,7 +234,7 @@ export default {
       activeNames: ['1'],
       dialogTableVisible: false,
       patientName: '',
-      relaOptions: ['<', '=', '>'],
+      relaOptions: ['<', '=', '>', '包含'],
       relationFilter: [
         { label: '且', value: 'and' },
         { label: '或', value: 'or' }
