@@ -52,7 +52,7 @@ export default {
     },
     title: {
       type: String,
-      default: 'chart'
+      default: ''
     },
     titleLocal: {
       // 标题位置

@@ -132,24 +132,29 @@ const mutations = {
   [TYPES.UPDATACHARTLIST] (state, data) {
     const dataTest = []
 
-    for (let i = 0; i < Object.keys(data).length; i++) {
+    for (let i = 0; i < data.length; i++) {
       dataTest.push({
-        title: Object.keys(data)[i],
+        title: data[i][0]?.tap,
         treatmentDataX: [],
         treatmentDataY: [],
         totalList: []
       })
 
-      const keydata = Object.keys(data)[i] // 当前data对象中的某个对象名
-      dataTest[i].treatmentDataX = data[keydata].map((item, index) => {
+      // const keydata = Object.keys(data)[i] // 当前data对象中的某个对象名
+      // dataTest[i].treatmentDataX =  Object.keys(data[keydata])
+      // dataTest[i].treatmentDataY = Object.values(data[keydata])
+      // dataTest[i].treatmentDataY = dataTest[i].treatmentDataY.map(item => {
+      //   return item.toFixed(2)
+      // })
+      dataTest[i].treatmentDataX = data[i].map((item, index) => {
         return item.title
       })
-      dataTest[i].totalList = data[keydata].map((item, index) => {
+      dataTest[i].totalList = data[i].map((item, index) => {
         return item.total
       })
       // 只要前十个，解决相隔无字
       dataTest[i].treatmentDataX = dataTest[i].treatmentDataX.splice(0, 10)
-      dataTest[i].treatmentDataY = data[keydata].map(item => {
+      dataTest[i].treatmentDataY = data[i].map(item => {
         return Number(item.percent.toFixed(2))
       })
     }
@@ -165,29 +170,29 @@ const mutations = {
   [TYPES.UPDATACHARTLISTDEFAULT] (state, data) {
     const dataTest = []
 
-    for (let i = 0; i < Object.keys(data).length; i++) {
+    for (let i = 0; i < data.length; i++) {
       dataTest.push({
-        title: Object.keys(data)[i],
+        title: data[i][0]?.tap,
         treatmentDataX: [],
         treatmentDataY: [],
         totalList: []
       })
 
-      const keydata = Object.keys(data)[i] // 当前data对象中的某个对象名
+      // const keydata = Object.keys(data)[i] // 当前data对象中的某个对象名
       // dataTest[i].treatmentDataX =  Object.keys(data[keydata])
       // dataTest[i].treatmentDataY = Object.values(data[keydata])
       // dataTest[i].treatmentDataY = dataTest[i].treatmentDataY.map(item => {
       //   return item.toFixed(2)
       // })
-      dataTest[i].treatmentDataX = data[keydata].map((item, index) => {
+      dataTest[i].treatmentDataX = data[i].map((item, index) => {
         return item.title
       })
-      dataTest[i].totalList = data[keydata].map((item, index) => {
+      dataTest[i].totalList = data[i].map((item, index) => {
         return item.total
       })
       // 只要前十个，解决相隔无字
       dataTest[i].treatmentDataX = dataTest[i].treatmentDataX.splice(0, 10)
-      dataTest[i].treatmentDataY = data[keydata].map(item => {
+      dataTest[i].treatmentDataY = data[i].map(item => {
         return Number(item.percent.toFixed(2))
       })
     }
