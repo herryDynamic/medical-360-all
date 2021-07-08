@@ -37,6 +37,7 @@
           !diseaseInfoSelectData.fullscreenLoading && !diseaseInfoSelectData
         "
       ></Empty>
+      <!-- 右侧边栏 -->
       <div
         ref="fixedWrap"
         id="right-fixed-wrap"
@@ -48,6 +49,7 @@
         <p
           @click="
             ONSHOWORCLOSEDRAWER({ drawer: $refs.drawer, type: index + 1 })
+            drawerShow = true
           "
           v-for="(tab, index) in rightDraweTabs"
           :key="index"
@@ -69,6 +71,7 @@
       <component :is="componentForm"></component>
     </el-dialog>
     <div
+      v-show="drawerShow"
       ref="drawer"
       class="drawer-wrap"
       :class="[drawer ? 'drawerDefault' : '']"
@@ -76,9 +79,13 @@
       <div v-if="drawer" class="drawer-ctn">
         <div class="drawer-title-wrap shadow">
           <h4>{{ rightDraweTabs[defaultTab].title }}</h4>
+          <!-- 关闭叉号 -->
           <i
             class="el-icon-close"
-            @click="ONSHOWORCLOSEDRAWER({ drawer: $refs.drawer, type: 0 })"
+            @click="
+              ONSHOWORCLOSEDRAWER({ drawer: $refs.drawer, type: 0 })
+              drawerShow = false
+            "
           ></i>
         </div>
         <div class="drawer-content-wrap shadow">
@@ -136,6 +143,7 @@ export default {
   },
   data () {
     return {
+      drawerShow: false,
       diseaseInfo: {},
       rightDraweTabs: [
         { title: '方案推荐', icon: 'el-icon-s-cooperation', count: 0 },
