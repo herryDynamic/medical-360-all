@@ -116,6 +116,7 @@ import FormDialog from '@/components/Disease360/FormDialog'
 import FormDialogEdit from '@/components/Disease360/FormDialogEdit'
 import PathologyInfo from '@/components/Disease360/PathologyInfo'
 import PathologyInfoQZ from '@/components/Disease360/PathologyInfoQZ'
+import Feedback from '@/components/Disease360/Feedback'
 import PathologyInfoNew from '@/components/Disease360/PathologyInfoNew'
 import SchemeRecommendation from '@/components/Disease360/SchemeRecommendation'
 import SimilarCases from '@/components/Disease360/SimilarCases'
@@ -133,6 +134,7 @@ export default {
     PathologyInfo,
     SchemeRecommendation,
     SimilarCases,
+    Feedback,
     DocumentRetrieval,
     FollowUp,
     [Button.name]: Button,
@@ -149,7 +151,9 @@ export default {
         { title: '方案推荐', icon: 'el-icon-s-cooperation', count: 0 },
         { title: '相似病例', icon: 'el-icon-s-claim', count: 0 },
         { title: '文献检索', icon: 'el-icon-s-finance', count: 0 },
-        { title: '全景图', icon: 'el-icon-time', count: 0 }
+        { title: '意见反馈', icon: 'el-icon-edit-outline', count: 0 }
+        // { title: '全景图', icon: 'el-icon-time', count: 0 }
+
         // { title: '随访', icon: 'el-icon-edit-outline' }
         // { title: 'MDT', icon: 'el-icon-edit-outline' }
       ],

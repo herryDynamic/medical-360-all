@@ -468,12 +468,13 @@ const mutations = {
    */
   [TYPES.ONSHOWORCLOSEDRAWER] (state, { drawer, type = 1 }) {
     // console.log(type)
-    if (type === 4) {
-      // router.push('DiseaseDetail360History')
-      const patientId = localStorage.getItem('patientId')
-      window.open(`${currentScience.jumpUrl}?patientId=${patientId}`, '_blank')
-      return
-    }
+    // 全景图注释
+    // if (type === 4) {
+    //   // router.push('DiseaseDetail360History')
+    //   const patientId = localStorage.getItem('patientId')
+    //   window.open(`${currentScience.jumpUrl}?patientId=${patientId}`, '_blank')
+    //   return
+    // }type
     state.screenWidth = document.body.clientWidth
     state.drawer = true
     if (type !== 0) {
@@ -498,10 +499,15 @@ const mutations = {
         stap = 22
         break
       case 4:
-        state.componentDefault = 'FollowUp'
-        state.draweWidth = parseInt(state.screenWidth * 0.26)
+        state.componentDefault = 'Feedback'
+        state.draweWidth = parseInt(state.screenWidth * 0.4)
         stap = 22
         break
+      // case 4:
+      //   state.componentDefault = 'FollowUp'
+      //   state.draweWidth = parseInt(state.screenWidth * 0.26)
+      //   stap = 22
+      //   break
       case 5:
         state.componentDefault = 'FollowUp'
         state.draweWidth = parseInt(state.screenWidth * 0.26)

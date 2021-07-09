@@ -21,7 +21,8 @@ const diease360 = {
   exportDataModel: p => getBlob(`/v1/exportDataModel/${p.disease_name}`), // 生成导入模板
   importData: p => post('/v1/importData', p), // 导入Excel数据
   similarityCaseSearh: p => post('/v1/similarityCaseSearh', p), // 查树状结构
-  conditionList: p => post(`v1/conditionList?diseaseName=${p.disease_name}`)
+  conditionList: p => post(`v1/conditionList?diseaseName=${p.disease_name}`),
+  submitProposalInfo: p => post('/v1/submitProposalInfo', p) // 提交建议
 }
 
 export default diease360

@@ -95,10 +95,10 @@
       <div class="pagination-wrap">
         <el-pagination
           background
-          :page-size="10"
+          :page-size="pageSize"
           @current-change="onCurrentChange"
           layout="prev, pager, next, total"
-          :total="tableDataAll.length"
+          :total="tableDataAll"
         >
         </el-pagination>
       </div>
@@ -141,7 +141,9 @@ export default {
   },
   data () {
     return {
-      searchForm: {}
+      searchForm: {},
+      pageSize: 10,
+      pageIndex: 1
     }
   },
   computed: {
@@ -153,6 +155,11 @@ export default {
   },
   mounted () {
     this.start()
+    // this.$store.dispatch('diseaseEntry/apiPostAtientTableSelect', {
+    //   disease_name: localStorage.getItem('disease_name'),
+    //   pageSize: this.pageSize,
+    //   pageIndex: this.pageIndex
+    // })
   },
   methods: {
     ...mapMutations({
@@ -167,7 +174,15 @@ export default {
     //   diease360.getSimilarityEntity(data).then(res => {})
     // },
     onCurrentChange (val) {
-      this.SETPAGELIST({ currentPage: val })
+      this.pageIndex = val
+      // console.log(val)
+      // this.similarityCase()
+      // this.SETPAGELIST({ currentPage: val })
+      this.$store.dispatch('diseaseEntry/apiPostAtientTableSelect', {
+        disease_name: localStorage.getItem('disease_name'),
+        pageSize: this.pageSize,
+        pageIndex: this.pageIndex
+      })
     },
     onPushDetail (item) {
       this.$emit('onPushDetail', item)
