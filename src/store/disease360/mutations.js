@@ -80,7 +80,7 @@ const mutations = {
   // 添加一条数据事件
   [TYPES.ONADDFLITER] (state) {
     const obj = {
-      relation: 'or', // 默认为或
+      relation: 'and', // 默认为且
       theme: '',
       condition: '',
       range: '',
