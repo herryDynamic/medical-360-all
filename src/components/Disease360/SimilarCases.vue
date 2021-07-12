@@ -101,6 +101,8 @@
               :filtersData="filtersData"
               :searchFilters="searchFilters"
               :presentation_type="presentation_type"
+              :option_info="option_info"
+              :disease_info_id="disease_info_id"
             ></RetrievalForm>
           </div>
           <!-- 检索 -->
@@ -243,6 +245,8 @@ export default {
       filtersData: ['搜索关系', '搜索主题', '搜索条件', '值域范围'],
       isShowEchart: 1,
       presentation_type: '3',
+      option_info: '0',
+      disease_info_id: '',
       advancedSearchForm: {},
       myChartTitleAndList: [],
       form: {
@@ -333,6 +337,10 @@ export default {
       this.presentation_type = this.searchDataList[data2]?.children[
         data3
       ].presentation_type
+      this.option_info = this.searchDataList[data2]?.children[data3].option_info
+      this.disease_info_id = this.searchDataList[data2]?.children[
+        data3
+      ].id.toString()
 
       // // 赋值下拉框数据:取全部值
       // const item = this.searchDataList[data2]?.children[data3]
@@ -557,14 +565,16 @@ export default {
               label: item?.disease_info_title || '',
               value:
                 i +
-                '-' +
-                index +
-                '-' +
-                item.id +
-                '-' +
-                item.disease_info_title +
-                '-' +
-                item.presentation_type,
+                  '-' +
+                  index +
+                  '-' +
+                  item.id +
+                  '-' +
+                  item.disease_info_title +
+                  '-' +
+                  item.presentation_type +
+                  '-' +
+                  item.option_info || '0',
               publicInfoModel: item.publicInfoModel
             }
           })

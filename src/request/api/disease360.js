@@ -22,7 +22,11 @@ const diease360 = {
   importData: p => post('/v1/importData', p), // 导入Excel数据
   similarityCaseSearh: p => post('/v1/similarityCaseSearh', p), // 查树状结构
   conditionList: p => post(`v1/conditionList?diseaseName=${p.disease_name}`),
-  submitProposalInfo: p => post('/v1/submitProposalInfo', p) // 提交建议
+  submitProposalInfo: p => post('/v1/submitProposalInfo', p), // 提交建议
+  searchOptionInfo: p =>
+    get(
+      `/v1/searchOptionInfo?option_info=${p.option_info}&disease_info_id=${p.disease_info_id}&disease_name=${p.disease_name}&pageIndex=${p.pageIndex}&pageSize=${p.pageSize}`
+    )
 }
 
 export default diease360

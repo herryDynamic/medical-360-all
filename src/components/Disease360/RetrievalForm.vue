@@ -90,7 +90,7 @@
               </el-option>
             </el-select>
             <div
-              v-if="presentation_type === '1'"
+              v-if="presentation_type === '1' && option_info !== '1'"
               class="demo-input-size"
               style="width:130px;margin-left:20px;"
             >
@@ -101,6 +101,21 @@
                 v-model="fliter.range"
               >
               </el-input>
+            </div>
+            <div
+              v-if="presentation_type === '1' && option_info === '1'"
+              class="demo-input-size"
+              style="width:130px;margin-left:20px;"
+            >
+              <el-autocomplete
+                :fetch-suggestions="querySearchAsync"
+                placeholder="请输入内容"
+                v-model.trim="fliter.range"
+                size="small"
+                @select="handleSelect"
+                suffix-icon="el-icon-date"
+              >
+              </el-autocomplete>
             </div>
 
             <!-- 添加children -->
@@ -190,7 +205,7 @@
               </el-option>
             </el-select>
             <div
-              v-if="presentation_type === '1'"
+              v-if="presentation_type === '1' && option_info !== '1'"
               class="demo-input-size"
               style="width:130px;margin-left:20px;"
             >
@@ -201,6 +216,21 @@
                 v-model="child.range"
               >
               </el-input>
+            </div>
+            <div
+              v-if="presentation_type === '1' && option_info === '1'"
+              class="demo-input-size"
+              style="width:130px;margin-left:20px;"
+            >
+              <el-autocomplete
+                :fetch-suggestions="querySearchAsync"
+                placeholder="请输入内容"
+                v-model.trim="child.range"
+                size="small"
+                @select="handleSelect"
+                suffix-icon="el-icon-date"
+              >
+              </el-autocomplete>
             </div>
             <!-- 删除一条children数据 -->
             <div style="padding-left: 20px">
@@ -225,6 +255,7 @@
 
 <script>
 import { mapMutations } from 'vuex'
+import disease360 from '@/request/api/disease360'
 export default {
   props: {
     // 当前注释
@@ -257,8 +288,20 @@ export default {
     },
     presentation_type: {
       type: String
+    },
+    option_info: {
+      type: String
+    },
+    disease_info_id: {
+      type: String
     }
   },
+  watch: {
+    option_info (val) {
+      console.log(val, 'option_info')
+    }
+  },
+  mounted () {},
   methods: {
     ...mapMutations({
       // 搜索主题下拉框
@@ -274,6 +317,29 @@ export default {
     }),
     onSubmit () {
       this.$emit('onSubmit')
+    },
+    handleSelect (fliter) {
+      return fliter.range
+    },
+    querySearchAsync (queryString, callback) {
+      const params = {
+        option_info: queryString,
+        disease_info_id: this.disease_info_id,
+        disease_name: localStorage.getItem('disease_name'),
+        pageIndex: 1,
+        pageSize: 40
+      }
+      if (queryString === '') {
+        return
+      }
+      disease360.searchOptionInfo(params).then(res => {
+        const data = res.data.data.map(item => {
+          return {
+            value: item
+          }
+        })
+        callback(data)
+      })
     }
   }
 }
