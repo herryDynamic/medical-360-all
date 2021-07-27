@@ -529,7 +529,7 @@ export default {
           return {
             label: item?.disease_info_title || '',
             value: index + '-' + item.id + '-' + item.disease_info_title,
-            publicInfoModel: item.publicInfoModel
+            publicInfoModel: item.publicInfoModel || []
           }
         })
         // 修改图标连线数据title
