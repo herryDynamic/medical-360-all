@@ -16,6 +16,7 @@ const state = {
   searchDialogForm: {
     theme: ''
   },
+  searchNowTrue: false, // 控制立即搜索按钮是否为搜索
   searchDataList: [], // 搜索主题的搜索项数据
   searchDataIndex: null, // 高级搜索弹出框选择后进行赋值
   activeName: '0',

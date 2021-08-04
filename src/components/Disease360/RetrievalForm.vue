@@ -244,7 +244,11 @@
           </div>
         </div>
         <div class="gj-search-btn">
-          <el-button type="primary" @click="onSubmit" size="mini"
+          <el-button
+            type="primary"
+            :loading="searchNowTrue"
+            @click="onSubmit"
+            size="mini"
             >立即搜索</el-button
           >
         </div>
@@ -254,7 +258,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import disease360 from '@/request/api/disease360'
 export default {
   props: {
@@ -296,10 +300,18 @@ export default {
       type: String
     }
   },
+  data () {
+    return {}
+  },
   watch: {
     option_info (val) {
       console.log(val, 'option_info')
     }
+  },
+  computed: {
+    ...mapState({
+      searchNowTrue: state => state.disease360.searchNowTrue
+    })
   },
   mounted () {},
   methods: {
@@ -313,9 +325,12 @@ export default {
       // 删除数据
       ONDELFLITER: 'disease360/ONDELFLITER',
       // 删除children数据
-      ONDELCHILDFLITER: 'disease360/ONDELCHILDFLITER'
+      ONDELCHILDFLITER: 'disease360/ONDELCHILDFLITER',
+      // 控制立即搜索按钮是否为搜索
+      SEARCHNOWTRUE: 'disease360/SEARCHNOWTRUE'
     }),
     onSubmit () {
+      this.SEARCHNOWTRUE(true)
       this.$emit('onSubmit')
     },
     handleSelect (fliter) {

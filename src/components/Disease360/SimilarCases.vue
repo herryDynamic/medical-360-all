@@ -387,7 +387,9 @@ export default {
       UPDATACHARTDATAPARALLELAXISDATA:
         'disease360/UPDATACHARTDATAPARALLELAXISDATA',
       CLEARSEARCHFILTERS: 'disease360/CLEARSEARCHFILTERS',
-      UPDATACHARTTITLEDATANEXT: 'disease360/UPDATACHARTTITLEDATANEXT'
+      UPDATACHARTTITLEDATANEXT: 'disease360/UPDATACHARTTITLEDATANEXT',
+      // 控制立即搜索按钮是否为搜索
+      SEARCHNOWTRUE: 'disease360/SEARCHNOWTRUE'
     }),
     conditionList () {
       const param = {
@@ -700,7 +702,9 @@ export default {
       this.UPDATAONADDChILDFILTERTitle() // 修改线条图的title
 
       disease360.similarityCaseSearh(data).then(res => {
+        this.SEARCHNOWTRUE(false)
         if (res.status === '0') {
+          this.$message.success('自定义搜索成功')
           // // 赋值表格
           // this.tableData = res.data
           // this.tableData.forEach(element => {
@@ -720,7 +724,7 @@ export default {
           this.CHARTDATA(data) // 修改线性图表展示数据：dataJB
           this.UPDATACHARTLIST(res.data.statistics) // 修改柱状图数据
           // this.UPDATACHARTLISTPIE(res.data.statistics)
-          this.UPDATACHARTDATAPARALLELAXISDATA(res.data.list)
+          this.UPDATACHARTDATAPARALLELAXISDATA(res.data.list) // 修改线条图下拉框
 
           // 跳转组件
           this.onChangeComponent({ val: 1, title: '病人筛选结果' })

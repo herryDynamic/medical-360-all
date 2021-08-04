@@ -105,6 +105,10 @@ const mutations = {
   [TYPES.SEARCHDATAINDEX] (state, data) {
     state.searchDataIndex = data
   },
+  // 控制立即搜索按钮是否为搜索
+  [TYPES.SEARCHNOWTRUE] (state, data) {
+    state.searchNowTrue = data
+  },
   /** ********************************高级搜索：值增删改查：END*************** */
 
   /** *******************************echarts饼形图、柱状图修改：START*************** */
